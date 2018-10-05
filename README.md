@@ -4,6 +4,7 @@
 ## Team Members
 + Bryant, StatsThoughts
 + Charlotte, cjlcasey
++ Yulia, YuliaYashneva
 + Name 3, ID3
 + Name 4, ID4
 
