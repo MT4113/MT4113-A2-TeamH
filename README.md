@@ -3,7 +3,7 @@
 
 ## Team Members
 + Bryant, StatsThoughts
-+ Name 2, ID2
++ Charlotte, cjlcasey
 + Name 3, ID3
 + Name 4, ID4
 
