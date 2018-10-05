@@ -1,8 +1,8 @@
 # Assignment 2
-# Team A
+# Team H
 
 ## Team Members
-+ Name 1, ID1
++ Bryant, StatsThoughts
 + Name 2, ID2
 + Name 3, ID3
 + Name 4, ID4
