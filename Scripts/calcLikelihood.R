@@ -15,27 +15,30 @@ unknownage <- fishdata[which(fishdata$Age == 0),]
 
 
 # Function to assign unkownage[,2] with age category using dist of known:
-prob.category <- function(length, category = 1){
+prob.category <- function(x, category){
+  #Purpose - Calcualtes the probability observations x are 
   dist <- knownage[knownage$Age == category,]
   mu <- mean(dist[,2]) 
   sd <- var(dist[,2])^.5
-  prob <- dnorm(length, mu, sd)
+  prob <- dnorm(x, mu, sd)
   return(prob)
 }
 
 initials.for.unknown <- function(x){
-  # Input intended to be unknownage[,2]
+  # Input intended to be unknownage[,2]. 
   # Output to give dataframe of fish lengths against expected ages.
+  
+  ### Needs to be generalized for any set of dataframe
   initials <- data.frame("Length" = x, "Age" = rep(0, 900))
   probs <- matrix(rep(0, 2700),nrow = 900, ncol = 3)
+  
+  # Calculates the probabilites for each category 
   probs[,1] <- prob.category(x,1)
   probs[,2] <- prob.category(x,2)
   probs[,3] <- prob.category(x,3)
   
-  for (i in 1:900){
-    # Aim to vectorise
-    initials[i,2] <- which.max(probs[i,])
-  }
+  # This is the most efficent method, double check this works (Bryant)
+  initials[,2] <- apply(probs[,c(1:3)], 1, function(x){which.max(x)})
   return(initials)
 }
 
@@ -57,5 +60,5 @@ k.estimates <- function(){
   
   return(data.frame("mu" = mu, "sigma" = sigma, "lambda" = lambda))
 }
- #k.estimates() 
+#k.estimates() 
 
