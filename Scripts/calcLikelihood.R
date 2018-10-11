@@ -16,7 +16,7 @@ unknownage <- fishdata[which(fishdata$Age == 0),]
 
 # Function to assign unkownage[,2] with age category using dist of known:
 prob.category <- function(x, category){
-  #Purpose - Calcualtes the probability observations x are 
+  #Purpose - Calcualtes the probability observations x are of age category  
   dist <- knownage[knownage$Age == category,]
   mu <- mean(dist[,2]) 
   sd <- var(dist[,2])^.5
@@ -60,5 +60,30 @@ k.estimates <- function(){
   
   return(data.frame("mu" = mu, "sigma" = sigma, "lambda" = lambda))
 }
-#k.estimates() 
+test <- k.estimates() 
 
+prob_expectations <- function(df, k_table){
+  # Purpose - Calculate the probabilites for each observations
+  # Inputs
+  #       df - VECTOR containing fish lengths
+  #       t_table - dataframe containing estimates of mu, sigma and lambda
+  # Outputs
+  #         Matrix of results wiht probabiltes for each observation to be in each age class (k)
+  
+  # Generates empty matrix of probabilities 
+  prob_df <- matrix(rep(0, 3*length(df)),nrow = length(df), ncol = 3)
+  
+  # Gets the prior probaility (lambida), and generates the likelihood P(x|x in k) for all age classes
+  for (i in c(1:3)) {
+    prob_df[,i] <- sapply(df, function(x){dnorm(x, k_table[i, "mu"], k_table[i, "sigma"])})
+    prob_df[,i] <- prob_df[,i]*k_table[i, "lambda"]
+  }
+  
+  #Cacluates the posterior (LHS of equation)
+  standardized_whole <- (prob_df[,1] + prob_df[,2] + prob_df[,3])
+  prob_df <- prob_df/standardized_whole
+  
+  return(prob_df)
+}
+
+head(prob_expectations(unknownage[,2], test))
