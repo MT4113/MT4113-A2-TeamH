@@ -5,7 +5,6 @@ likelihood <- function(x){
 #---------------------------------Initialising:---------------------------------
 
 # Set Up
-setwd("/Users/lemon7/Desktop/MT4113 Computing in Statistics/Assignments/Assignment 2/")
 load("FishLengths.RData")
 
 fishdata <- x
@@ -14,27 +13,6 @@ knownage <- na.omit(fishdata)                 # Where real ages have been given.
 fishdata[is.na(fishdata)] <- 0
 unknownage <- fishdata[which(fishdata$Age == 0),]
 
-# Plot for Visualisation of Overlap between Categories:
-plot.understanding <- function(){
-  # In function to keep Run clean.
-  par(mfrow = c(3,1))
-  hist(knownage[,2], xlab = "Fish Length (cm)", ylab = "Frequency", 
-       main = "Histogram of Known")
-  hist(fishdata[,2], xlab = "Fish Length (cm)", ylab = "Frequency", 
-       main = "Histogram of All")
-  
-  plot(knownage$Age, knownage$Length, xlab = "Age Category", 
-       ylab = "Fish Length")
-  
-  abline(h = max(knownage[knownage$Age ==1,2]), col = "blue")
-  abline(h = min(knownage[knownage$Age ==1,2]), col = "blue", , lty = 3)
-  abline(h = max(knownage[knownage$Age ==2,2]), col = "red")
-  abline(h = min(knownage[knownage$Age ==2,2]), col = "red", , lty = 3)
-  abline(h = max(knownage[knownage$Age ==3,2]), col = "green")
-  abline(h = min(knownage[knownage$Age ==3,2]), col = "green", lty = 3)
-  
-  par(mfrow = c(1,1))
-}
 
 # Function to assign unkownage[,2] with age category using dist of known:
 prob.category <- function(length, category = 1){
@@ -79,5 +57,5 @@ k.estimates <- function(){
   
   return(data.frame("mu" = mu, "sigma" = sigma, "lambda" = lambda))
 }
-# k.estimates() 
+ #k.estimates() 
 
