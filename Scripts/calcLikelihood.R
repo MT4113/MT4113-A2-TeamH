@@ -94,12 +94,13 @@ prob.category <- function(dat, column, category = 1){
   #           length to see how many values fall into certain categories.
   
   x <- known(dat)
-  n <- lenght(x[1,])
+  n <- length(x[1,]) #sets n as the last column
   dist <- x[x[,n] == category,]   # Subsetting to required value in final column
   mu <- mean(dist[,column])       # Measuring the parameters from the colum of 
   sd <- var(dist[,column])^.5     # of interest.
-  prob <- dnorm(length(dist[,1]), mu, sd)
+  y <- unkown(dat)
   
+  prob <- dnorm(y[,1], mu, sd)
   return(prob)
 }
 
@@ -115,16 +116,16 @@ initials.for.unknown <- function(dat, column){
   # Outputs:
   #       initials: a data frame to give dataframe of fish lengths against 
   #                 expected ages.
-  x <- unkown(dat)     # Only need to set initial values where they are unknown
+  y <- unkown(dat)     # Only need to set initial values where they are unknown
   
-  initials <- data.frame("Response variable" = x[,column], 
+  initials <- data.frame("Response variable" = y[,column], 
                          "Est variable" = rep(0, 900))
   probs <- matrix(rep(0, 2700),nrow = 900, ncol = 3)
   
-  probs[,1] <- prob.category(x, column, 1)
-  probs[,2] <- prob.category(x, colunm, 2)
-  probs[,3] <- prob.category(x, column, 3)
-  
+  probs[,1] <- prob.category(dat, column, 1)
+  probs[,2] <- prob.category(dat, column, 2)
+  probs[,3] <- prob.category(dat, column, 3)
+
   # Assigning age category
   initials[,2] <- apply(probs[,c(1:3)], 1, function(x){which.max(x)})
   return(initials)
@@ -155,7 +156,6 @@ k.estimates <- function(dat, column){
   
   return(data.frame("mu" = mu, "sigma" = sigma, "lambda" = lambda))
 }
-test <- k.estimates() 
 
 #-------------------------------Post Initiation---------------------------------
 
