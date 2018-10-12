@@ -200,7 +200,7 @@ max_Ests <- function(df){
   mu <- apply(df[,c(2:k_val)], 2, function(x){return(sum(x * df[,1]))})
   mu <- mu/denoms
   #Estimates for stdev. THIS IS NOT OPTIMZED YET, Not sure if i can get rid of the for loop 
-  stdev <- c(NA, NA, NA)
+  stdev <- rep(NA, k_val-1)
   for (i in c(1:(k_val-1))){
     stdev[i] <- sum(df[,i+1]* ((df[,1]-mu[i])^2))
     stdev[i] <- sqrt(stdev[i]/denoms[1])
