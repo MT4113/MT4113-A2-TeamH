@@ -62,29 +62,34 @@ k.estimates <- function(){
 }
 test <- k.estimates() 
 
-prob_expectations <- function(df, k_table){
+prob_expectations <- function(df, k_table, k_numb){
   # Purpose - Calculate the probabilites for each observations
   # Inputs
   #       df - VECTOR containing fish lengths
   #       t_table - dataframe containing estimates of mu, sigma and lambda
+  #       k_numb - single value dictating the total number of factors for k
   # Outputs
   #         Matrix of results wiht probabiltes for each observation to be in each age class (k)
   
   # Generates empty matrix of probabilities 
-  prob_df <- matrix(rep(0, 3*length(df)),nrow = length(df), ncol = 3)
+  prob_df <- matrix(rep(0, k_numb*length(df)),nrow = length(df), ncol = k_numb)
   
   # Gets the prior probaility (lambida), and generates the likelihood P(x|x in k) for all age classes
-  for (i in c(1:3)) {
+  for (i in c(1:k_numb)) {
     prob_df[,i] <- sapply(df, function(x){dnorm(x, k_table[i, "mu"], k_table[i, "sigma"])})
     prob_df[,i] <- prob_df[,i]*k_table[i, "lambda"]
   }
   
   #Cacluates the posterior (LHS of equation)
-  standardized_whole <- (prob_df[,1] + prob_df[,2] + prob_df[,3])
+  
+  apply(prob_df, 1, sum)
+  standardized_whole <- apply(prob_df, 1, sum)
   prob_df <- prob_df/standardized_whole
   
   return(prob_df)
 }
+
+prob_expectations(unknownage[,2], test, 3)
 
 max_Ests <- function(df){
   # Purpose _ to generate MLE estimates for a given dataframe
