@@ -62,6 +62,8 @@ k.estimates <- function(){
 }
 test <- k.estimates() 
 
+#---------------------------------*no further*----------------------------------
+
 prob_expectations <- function(df, k_table, k_numb){
   # Purpose - Calculate the probabilites for each observations
   # Inputs
