@@ -89,8 +89,6 @@ prob_expectations <- function(df, k_table, k_numb){
   return(prob_df)
 }
 
-prob_expectations(unknownage[,2], test, 3)
-
 max_Ests <- function(df){
   # Purpose _ to generate MLE estimates for a given dataframe
   # Inputs - Dataframe containing lengths in col 1 and probabilites in columns 2-4 
