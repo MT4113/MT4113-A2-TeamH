@@ -14,12 +14,14 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
   
   # Initalize the Data ------------------------------------------------------
   # Need value for k_numb which is the number of factors in K
-  k_numb <- NA
-
+  k_numb <- 3#NA
+  
+  k_table <- k.estimates(data,2)
+  
   # Loop --------------------------------------------------------------------
 
   l2 = 0
-  l1 = NA
+  l1 = 10
   
   #Denote l2 as previous likelihood, l1 as newest likelihood
   while((abs(l2-l1) > epsilon) & (maxit >= 0) ){
