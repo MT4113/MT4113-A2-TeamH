@@ -131,7 +131,7 @@ initials.for.unknown <- function(dat, column){
   return(initials)
 }
 
-
+#THIS IS THE FUNCTION YOU CALL TO INIT THE DATA
 k.estimates <- function(dat, column){
   # Aims to create a data frame of the required parameters when considering the 
   # initial assignments given to unknown sub-frame.
