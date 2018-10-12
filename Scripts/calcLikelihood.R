@@ -91,30 +91,27 @@ prob_expectations <- function(df, k_table, k_numb){
 
 max_Ests <- function(df){
   # Purpose _ to generate MLE estimates for a given dataframe
-  # Inputs - Dataframe containing lengths in col 1 and probabilites in columns 2-4 
+  # Inputs - Dataframe containing lengths in col 1 and probabilites in the remaining columns
   # outputs - dataframe of mean, stdev and lambida estimates 
   
+  k_val <- length(df[1,])
 
   #Sum of all probabilites based on age class prediction
-  denoms <- apply(df[,c(2:4)], 2, sum)
-  print(denoms)
-  
+  denoms <- apply(df[,c(2:k_val)], 2, sum)
+
   # Estimates for the mean 
-  mu <- apply(df[,c(2:4)], 2, function(x){return(sum(x * df[,1]))})
+  mu <- apply(df[,c(2:k_val)], 2, function(x){return(sum(x * df[,1]))})
   mu <- mu/denoms
-  print(mu)
   #Estimates for stdev. THIS IS NOT OPTIMZED YET, Not sure if i can get rid of the for loop 
   stdev <- c(NA, NA, NA)
-  for (i in c(1:3)){
+  for (i in c(1:(k_val-1))){
     stdev[i] <- sum(df[,i+1]* ((df[,1]-mu[i])^2))
     stdev[i] <- sqrt(stdev[i]/denoms[1])
   }
-  print(stdev)
-  
+
   # Estimates for Lambida
   lambda <- denoms/length(df[,1])
-  print(lambda)
-  
+
   return(data.frame("mu" = mu, "sigma" = stdev, "lambda" = lambda))
 }
 
