@@ -58,7 +58,7 @@ prob.category <- function(dat, column, category = 1){
   sd <- var(dist[,column])^.5     # of interest.
   y <- unkown(dat)
   
-  prob <- dnorm(y[,1], mu, sd)
+  prob <- dnorm(y[,2], mu, sd) ###Y.Y: it was y[,1], which will be retrieving ID rather than length
   return(prob)
 }
 
@@ -178,4 +178,41 @@ max_Ests <- function(df){
   toReturn <- data.frame("mu" = mu, "sigma" = stdev, "lambda" = lambda)
   return(toReturn)
 }
+
+#_____Likelihood_______
+
+
+Likelihood_Eval <- function(dat, df) {
+  #Inputs:
+  #dat - the obsevations, which you want to test, in our case it is x[,2] -> lengths
+  #df - dataframe with means, sds and lambdas, in our case it is max_Ests()
+  #n - number of iterations
+  #Output:
+  #vector of likelihoods
+  
+  ####for checking df I was using k.estimates(x,2) and dat <- x
+
+  vector1 <- NULL
+  for (i in 1:length(dat)) {
+    exp_prob = 0 
+    for (k in 1:nrow(df)) {
+      prob <- df[k,3]*dnorm(dat[i], df[k,1], df[k,2])
+      exp_prob = exp_prob+prob
+    }
+    vector1 <- c(vector1, exp_prob)
+  }
+  return(vector1)
+}
+
+
+Iteration_likelihood <- function(dat,df) {
+  val = sum(log(Likelihood_Eval(dat,df)))
+  return(val)
+}
+
+
+
+#Iteration_likelihood(x[,2],k.estimates(x,2))
+
+
 
