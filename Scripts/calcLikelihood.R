@@ -32,48 +32,6 @@ unkown <- function(dat){
   
 }
 
-# Plot for Visualisation of Overlap between Categories:
-plot.understanding <- function(dat){
-  # The aim of these plots is to demonstrate the difference in distribution in 
-  # the known data and all the data, as well as the boxplots for the three 
-  # categories.
-  
-  par(mfrow = c(3,1))
-  hist(known(dat)[,2], xlab = "Fish Length (cm)", ylab = "Frequency", 
-       main = "Histogram of Known")
-  hist(dat[,2], xlab = "Fish Length (cm)", ylab = "Frequency", 
-       main = "Histogram of All")
-  
-  plot(known(dat)$Age, known(dat)$Length, xlab = "Age Category", 
-       ylab = "Fish Length")
-  
-  abline(h = max(known(dat)[known(dat)[,3] ==1,2]), col = "blue")
-  abline(h = min(known(dat)[known(dat)[,3] ==1,2]), col = "blue", , lty = 3)
-  abline(h = max(known(dat)[known(dat)[,3] ==2,2]), col = "red")
-  abline(h = min(known(dat)[known(dat)[,3] ==2,2]), col = "red", , lty = 3)
-  abline(h = max(known(dat)[known(dat)[,3] ==3,2]), col = "green")
-  abline(h = min(known(dat)[known(dat)[,3] ==3,2]), col = "green", lty = 3)
-  
-  par(mfrow = c(1,1))
-}
-
-# Required Plots
-plot.required <- function(dat){
-  # The aim here is to return the plots that are required in Task 1: Data Expl.
-  
-  # Histogram
-  par(mfrow = c(2,1))
-  hist(dat[,2], xlab = "Fish Length (cm)", ylab = "Frequency", 
-       main = "Histogram of Fish Lengths")
-  # Scatter Plot
-  plot(dat[,3], dat[,2], xaxt = "n", xlab = "Fish Age Category", 
-       ylab = "Fish Length (cm)",
-       main = "Plot of Age against Length in Fish")
-  axis(1, at = c(1,2,3))
-  par(mfrow = c(1,1))
-}
-
-
 #---------------------------------Initialising:---------------------------------
 
 
