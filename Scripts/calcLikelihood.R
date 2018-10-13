@@ -120,43 +120,52 @@ k.estimates <- function(dat, column){
 prob_expectations <- function(df, k_table, k_numb){
   # Purpose - Calculate the probabilites for each observations
   # Inputs
-  #       df - VECTOR containing fish lengths
+  #       df - dataframe containing the following
+  #            length of fish for observations
+  #            results wiht probabiltes for each observation to be in each age class (k)
   #       t_table - dataframe containing estimates of mu, sigma and lambda
   #       k_numb - single value dictating the total number of factors for k
   # Outputs
   #         Matrix of results wiht probabiltes for each observation to be in each age class (k)
   
-  # Generates empty matrix of probabilities 
-  prob_df <- matrix(rep(0, k_numb*length(df)),nrow = length(df), ncol = k_numb)
-  
+
   # Gets the prior probaility (lambida), and generates the likelihood P(x|x in k) for all age classes
-  for (i in c(1:k_numb)) {
-    prob_df[,i] <- sapply(df, function(x){dnorm(x, k_table[i, "mu"], k_table[i, "sigma"])})
-    prob_df[,i] <- prob_df[,i]*k_table[i, "lambda"]
+
+  
+  for (i in c(2:(k_numb+1))){
+    df[,i] <- dnorm(df[,1], k_table[i-1,"mu"], k_table[i-1,"sigma"]) #I have no clue WHY nans can appear. 
+    # They shouldnt but they DO appear in this step
+    df[is.nan(df[,i]),i] <- 0
+    
   }
   
   #Cacluates the posterior (LHS of equation)
+  standardized_whole <- apply(df[,-1], 1, sum)
   
-  apply(prob_df, 1, sum)
-  standardized_whole <- apply(prob_df, 1, sum)
-  prob_df <- prob_df/standardized_whole
-  
-  return(prob_df)
+  for (i in c(2:(k_numb+1))){
+    df[,i] <- (df[,i]*k_table[i-1, "lambda"])/standardized_whole
+    df[is.nan(df[,i]),i] <- 0
+  }
+  return(df)
 }
 
+#This shoudlnt be broken but it is for some reason 
 max_Ests <- function(df){
   # Purpose _ to generate MLE estimates for a given dataframe
   # Inputs - Dataframe containing lengths in col 1 and probabilites in the remaining columns
   # outputs - dataframe of mean, stdev and lambida estimates 
   
   k_val <- length(df[1,])
-
+  
   #Sum of all probabilites based on age class prediction
-  denoms <- apply(df[,c(2:k_val)], 2, sum)
-
+  denoms <- apply(df[,-1], 2, sum)
+  
   # Estimates for the mean 
-  mu <- apply(df[,c(2:k_val)], 2, function(x){return(sum(x * df[,1]))})
+  mu <- apply(df[,c(2:k_val)], 2, function(x){return(sum((x * df[,1])))})
   mu <- mu/denoms
+
+  mu[is.nan(mu)] <- 0
+  
   #Estimates for stdev. THIS IS NOT OPTIMZED YET, Not sure if i can get rid of the for loop 
   stdev <- rep(NA, k_val-1)
   for (i in c(1:(k_val-1))){
@@ -166,7 +175,7 @@ max_Ests <- function(df){
 
   # Estimates for Lambida
   lambda <- denoms/length(df[,1])
-
-  return(data.frame("mu" = mu, "sigma" = stdev, "lambda" = lambda))
+  toReturn <- data.frame("mu" = mu, "sigma" = stdev, "lambda" = lambda)
+  return(toReturn)
 }
 
