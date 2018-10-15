@@ -25,7 +25,7 @@ unknown <- function(dat){
   #       dat: a Data frame
   # Output: 
   #       unknownx: A dataframe with all the unknown values
-  n <- length(dat[1,]) # Counting number of columns for use to access final col
+  n <- length(dat[1,]) # Counting number of columns for use to access final col 
   dat[is.na(dat)] <- 0
   unknownx <- dat[which(dat[,n] == 0),]
   return(unknownx)
@@ -38,35 +38,34 @@ unknown <- function(dat){
 # Function to assign unkownage[,2] with age category using distribution of the 
 # fish lenghts already known:
 
-prob.category <- function(dat, column, category = 1){
-  # Gives the parameters of the column of interest given a certain category for 
-  # the final column. E.g.category could be from {1, 2, 3, ...}. 
+prob.category <- function(y, dat = x, column = 2, category = 1){
+  # Gives the probability of a value "y" appearing in a given a certain category 
+  # for the final column. E.g.category could be from {1, 2, 3, ...}. 
   # Limited to known sub set of "dat" data frame.
   #Inputs
+  #     y: specific value in column "column" that you want to find probability
   #     dat: data frame with the column you want distribution of the known vals
   #     column: the column in that data frame you want to investigate
   #     category: specific category that you want to check, e.g. age class, in
   #               final column.
   #Outputs
-  #     prob: a vector of length, mean and standard deviation. I've included the 
-  #           length to see how many values fall into certain categories.
-  
+  #     prob: probability of value y occuring in a category, assuming normal for
+  #           each category.
   x <- known(dat)
-  n <- length(x[1,]) #sets n as the last column
+  n <- length(x[1,])              # For selecting the final column
   dist <- x[x[,n] == category,]   # Subsetting to required value in final column
   mu <- mean(dist[,column])       # Measuring the parameters from the colum of 
   sd <- var(dist[,column])^.5     # of interest.
-  y <- unknown(dat)
+  prob <- dnorm(y, mu, sd)
   
-  prob <- dnorm(y[,2], mu, sd) ###Y.Y: it was y[,1], which will be retrieving ID rather than length
   return(prob)
 }
 
-initials.for.unknown <- function(dat, column){
+initials.for.unknown <- function(dat = x, column = 2){
   # The aim of this function is to use data from the known data frame to
-  # estimate the values for the unknown sub-frame. In this exercise, the 
-  # "Response variable" is the length with the "Est variable" being the  
-  # Age category.
+  # estimate the values for the unknown sub-frame's final column. In this 
+  # exercise, the "Response variable" is the length with the "Est variable"  
+  #  being the Age category.
   # Inputs: 
   #       dat: data frame
   #       column: column to be investigated (e.g. 2 goes to [,2] gives Fish 
