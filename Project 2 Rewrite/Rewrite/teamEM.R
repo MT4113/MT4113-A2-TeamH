@@ -1,5 +1,4 @@
 source("functions.R")
-
 teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
   # Data:
   #   Col1 - the fish IDs
@@ -29,7 +28,6 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
   #output - lamda values 
   k_mat <- init_prob_ests(data,k_mat,k_numb) #FOR TESTING ITS COMMENTED OUT
   k_mat_init <- k_mat
-  
   #input - the dataframe data 
   #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#
   #data_probs
@@ -39,8 +37,8 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
   
   # Loop --------------------------------------------------------------------
   
-  l2 <- likelihood(unknown_dat, k_mat, k_numb)
-  l1 <- l2 + (2*epsilon) 
+  l1 <- likelihood(unknown_dat, k_mat, k_numb)
+  l2 <- l1 + (2*epsilon) 
   while((abs(l2-l1) > epsilon) & maxit >0){
     # Reassign exit conditions 
     maxit <- maxit - 1 
@@ -49,7 +47,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
     #input - the dataframe data 
     #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#
     prob_table <- prob_ests(unknown_dat, k_mat, k_numb)
-    
+
     #input - probabilty table and k_mat and K_numb
     #output, a new k_mat updated
     #For some reason i now fully trust this function with my 3rd nonexistent child  

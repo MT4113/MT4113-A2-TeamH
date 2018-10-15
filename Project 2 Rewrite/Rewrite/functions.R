@@ -37,24 +37,27 @@ init_prob_ests <- function(data, k_table, k_numb){
   p_mat <- matrix(rep(NA,k_numb*N), ncol = k_numb) #Matrix of probabilites
   
   #based on k_table, assign probabilites 
-  for (i in c(1:k_numb)){
-    p_mat[,i] <- dnorm(unknown_dat$Length, k_table[i,"mu"], k_table[i,"sigma"])
-  }
-  
+  p_mat <- mapply(function(mu, sigma, dat){
+    return(dnorm(dat, mu, sigma))
+  },k_table$mu, k_table$sigma ,MoreArgs = list(dat = unknown_dat$Length))
+
   #Find most suitable class for each value
   unknown_dat$Age <- apply(p_mat, 1, function(x){which.max(x)})
   
   ages <- unique(unknown_dat$Age)
   ages <- ages[order(ages)]
   
+  init_ests <- mapply(
+    function(i, data){
+      return(c(
+        mean(unknown_dat$Length[unknown_dat$Age == i]), 
+        k_table$sigma[i] <- sd(unknown_dat$Length[unknown_dat$Age == i]),
+        length(unknown_dat$Age[unknown_dat$Age == i]))
+      )
+    }, ages, MoreArgs = list(data = data))
   
-  for (i in c(1:length(ages))){
-    k_table$lambda[i] <- length(unknown_dat$Age[unknown_dat$Age == ages[i]])/N
-    k_table$mu[i] <- mean(unknown_dat$Length[unknown_dat$Age == ages[i]])
-    k_table$sigma[i] <- sd(unknown_dat$Length[unknown_dat$Age == ages[i]])
-  }
+  return(data.frame("mu" = init_ests[1,], "sigma" = init_ests[2,], "lambda" = init_ests[3,]/N))
   
-  return(k_table)
 }
 
 prob_ests <- function(data, k_table, k_numb){
@@ -64,22 +67,20 @@ prob_ests <- function(data, k_table, k_numb){
   #   Col3 - The age class they are in (k = ...?). -1 if unknown 
   
   N <- length(data$Age) #Total number of unknown ages in the thing
-  p_mat <- matrix(rep(NA,k_numb*N), ncol = k_numb) #Matrix of probabilites
-  
-  for (i in c(1:k_numb)){ 
-    p_mat[,i] <- dnorm(data$Length, k_table[i,"mu"], k_table[i,"sigma"])
-    p_mat[,i] <- (p_mat[,i] * k_table[i,"lambda"])
-  }
+
+  p_mat <- mapply(function(mu, sigma, data, lambda){
+                  return(dnorm(data, mu, sigma) * lambda)},
+                  k_table$mu, k_table$sigma, k_table$lambda,
+                  MoreArgs = list(data=data$Length))
   
   denomSums <- apply(p_mat, 1, sum)
   
-  for (i in c(1:k_numb)){ #Can change this to an apply function 
-    p_mat[,i] <- p_mat[,i]/denomSums
-  }
-  
+  p_mat <- apply(p_mat, 2, function(x,ds){return(x/ds)}, ds = denomSums)
+
   output <- data.frame(data[,c(1:2)], p_mat)
   return(output)
 }
+
 
 max_ests <- function(prob_table, k_table, k_numb){
   # Data: - ONLY UNKNOWN DATA IS INPUT
@@ -102,12 +103,9 @@ max_ests <- function(prob_table, k_table, k_numb){
   
   
   #Sd Calculations
-  for(i in c(1:k_numb)){
-    k_table$sigma[i] <- sqrt( sum( (probs[,i] * ((lengths - k_table$mu[i])^2)) / baseProbSum[i]))
-    
-    #print(sqrt( sum( (probs[,i] * ((lengths - k_table$mu[i])^2)) / baseProbSum)))
-    #print(length((probs[,i] * ((lengths - k_table$mu[i])^2))))
-  }
+  k_table$sigma <- mapply(function(prob, mu, baseProbSumVal, lengths){
+                  return( sqrt(sum( prob * ((lengths-mu)^2) / baseProbSumVal)) )
+                  },probs, k_table$mu, baseProbSum, MoreArgs = list(lengths = lengths))
   
   #Lambida Calculations 
   k_table$lambda <- baseProbSum/N
