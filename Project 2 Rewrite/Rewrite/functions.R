@@ -85,18 +85,32 @@ prob_ests <- function(data, k_table, k_numb){
   return(output)
 }
 
+add_binary_cols <- function(x, dat){
+  return(ifelse(x == dat, 1, 0))
+}
 
-max_ests <- function(prob_table, k_table, k_numb){
+max_ests <- function(prob_table, k_table, k_numb, flag, known_dat){
   # Data: - ONLY UNKNOWN DATA IS INPUT
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
   #   Col3 to 3+k_numb - probs it is in each age class k
-  
-  N <- length(prob_table$Length)
-  
   probs <- prob_table[,c(-1,-2)] #simply to only probabilites 
-  lengths <- prob_table[,"Length"] #Can add lengths and stuff to the bottom if we want to extend for true values
+  lengths <- prob_table$Length #Can add lengths and stuff to the bottom if we want to extend for true values
   
+  if(flag){
+    prob_table_known <- matrix(rep(0,length(known_dat$Age) * k_numb), ncol = k_numb)
+    
+    unique_Ages <- unique(known_dat$Age)
+    unique_Ages <- unique_Ages[order(unique_Ages)]
+    
+    prob_table_known <- sapply(unique_Ages, add_binary_cols, dat = known_dat$Age)
+    
+    format <- data.frame(prob_table_known)
+    probs <- rbind(format, probs)
+    lengths <- c(known_dat$Length, lengths)
+  }
+  
+  N <- length(lengths)
   
   baseProbSum<- apply(probs, 2, sum) #sums of all probs based on age class
   

@@ -1,5 +1,6 @@
 source("functions.R")
-teamEM <- function(data, epsilon = 1e-08, maxit = 1000, inc_known_k_init = FALSE){
+teamEM <- function(data, epsilon = 1e-08, maxit = 1000, 
+                   inc_known_k_init = FALSE, inc_known_k_iter = FALSE){
   # Data:
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
@@ -8,6 +9,8 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000, inc_known_k_init = FALSE
   # maxit: max iterations
   # inc_known_k_init: True if including the values of known age classes into the 
   #                   Initalization of mu, sigma, and lamda. Default is False 
+  # inc_known_k_iter: True if including values of known age classes into the 
+  #                   maximization of mu, sigma, and lamda. Default is False 
   
   # Error Checking ----------------------------------------------------------
   #Need something to ensure that inputs are correct
@@ -35,8 +38,8 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000, inc_known_k_init = FALSE
   #data_probs
   
   #Seperate known and unknown data
-  unknown_dat <- data[data$Age == -1,]
-  
+  unknown_dat <- data[data$Age == -1,] #this can be moved up and optimized earlier since it can be used
+  known_dat <- data[data$Age != -1,]
   # Loop --------------------------------------------------------------------
   
   l1 <- likelihood(unknown_dat, k_mat, k_numb)
@@ -53,7 +56,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000, inc_known_k_init = FALSE
     #input - probabilty table and k_mat and K_numb
     #output, a new k_mat updated
     #For some reason i now fully trust this function with my 3rd nonexistent child  
-    k_mat <- max_ests(prob_table, k_mat, k_numb)
+    k_mat <- max_ests(prob_table, k_mat, k_numb, inc_known_k_iter, known_dat)
     
     #Input - 
     #Output - values for likelihood in l2, this is LOG likelihood
