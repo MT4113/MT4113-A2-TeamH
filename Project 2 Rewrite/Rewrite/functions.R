@@ -7,23 +7,21 @@ init_data_ests <- function(data){
   #   Col2 - The Fish lengths 
   #   Col3 - The age class they are in (k = ...?). -1 if unknown  
   
-  ages <- unique(data$Age)
+  ages <- unique(data$Age) #Gets all the unique Ages used in k
   ages <- ages[ages != -1]  #removes unknown ages
   ages <- ages[order(ages)] #Ensures lowest age is first to highest
+  N <- length(data[(data[,3] != -1),2]) # numb of values that are known
   
-  mu <- rep(NA, length(ages))
-  sigma <- rep(NA, length(ages))
-  lambda <- rep(NA, length(ages))
+  init_ests <- mapply(
+    function(i, data){
+      return(c(
+        mean(data$Length[(data$Age == i)]), 
+        sd(data$Length[(data$Age == i)]),
+        length(data$Length[(data$Age == i)])
+      ))
+    }, c(ages), MoreArgs = list(data = data))
   
-  for (i in c(1:length(ages))){
-    mu[i] <- mean(data[(data$Age == ages[i]),2])
-    sigma[i] <- sd(data[(data$Age == ages[i]),2])
-    lambda[i] <- length(data[(data$Age == ages[i]),2])
-  }
-  
-  lambda <- lambda/length(data[(data[,3] != -1),2])
-  
-  return(data.frame("mu" = mu, "sigma" = sigma, "lambda" = lambda))
+  return(data.frame("mu" = init_ests[1,], "sigma" = init_ests[2,], "lambda" = init_ests[3,]/N))
   
 }
 
