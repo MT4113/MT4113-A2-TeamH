@@ -24,11 +24,11 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
   #input - Dataframe data
   #Out - matrix containing the estimates of stdev, mu and lambida
   k_mat <- init_data_ests(data)
-  k_mat_init <- k_mat
-  
+
   #input - dataframe data
   #output - lamda values 
   k_mat <- init_prob_ests(data,k_mat,k_numb) #FOR TESTING ITS COMMENTED OUT
+  k_mat_init <- k_mat
   
   #input - the dataframe data 
   #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#
