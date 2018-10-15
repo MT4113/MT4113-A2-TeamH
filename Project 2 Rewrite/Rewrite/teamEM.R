@@ -16,7 +16,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
   # Data initalization ------------------------------------------------------
   
   #Sets Unknown ages to age 0. 
-  data[is.na(data$Age),3] <- -1
+  data$Age[is.na(data$Age)] <- -1
   data$Age <- as.factor(data$Age)
   
   k_numb <- length(unique(data$Age))-1 #Gives total numb of k values 
