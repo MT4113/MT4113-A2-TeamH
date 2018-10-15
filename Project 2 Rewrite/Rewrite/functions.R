@@ -19,7 +19,7 @@ init_data_ests <- function(data){
         sd(data$Length[(data$Age == i)]),
         length(data$Length[(data$Age == i)])
       ))
-    }, c(ages), MoreArgs = list(data = data))
+    }, ages, MoreArgs = list(data = data))
   
   return(data.frame("mu" = init_ests[1,], "sigma" = init_ests[2,], "lambda" = init_ests[3,]/N))
   
