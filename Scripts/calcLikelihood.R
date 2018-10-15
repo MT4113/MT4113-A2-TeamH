@@ -18,7 +18,7 @@ known <- function(dat){
   knownx <- na.omit(dat)
   return(knownx)
 }
-unkown <- function(dat){
+unknown <- function(dat){
   # To split known data from unknown data assuming the known/unknown occurs in 
   # the final column.
   # Input:
@@ -56,7 +56,7 @@ prob.category <- function(dat, column, category = 1){
   dist <- x[x[,n] == category,]   # Subsetting to required value in final column
   mu <- mean(dist[,column])       # Measuring the parameters from the colum of 
   sd <- var(dist[,column])^.5     # of interest.
-  y <- unkown(dat)
+  y <- unknown(dat)
   
   prob <- dnorm(y[,2], mu, sd) ###Y.Y: it was y[,1], which will be retrieving ID rather than length
   return(prob)
@@ -74,7 +74,7 @@ initials.for.unknown <- function(dat, column){
   # Outputs:
   #       initials: a data frame to give dataframe of fish lengths against 
   #                 expected ages.
-  y <- unkown(dat)     # Only need to set initial values where they are unknown
+  y <- unknown(dat)     # Only need to set initial values where they are unknown
   
   initials <- data.frame("Response variable" = y[,column], 
                          "Est variable" = rep(0, 900))
