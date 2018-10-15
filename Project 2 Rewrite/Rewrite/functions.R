@@ -25,16 +25,14 @@ init_data_ests <- function(data){
   
 }
 
-init_prob_ests <- function(data, k_table, k_numb){
+init_prob_ests <- function(data, k_table, k_numb, flag){
   # Data:
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
   #   Col3 - The age class they are in (k = ...?). -1 if unknown 
   
   unknown_dat <- data[data$Age == -1,] #Sifts for only unknown data
-  N <- length(unknown_dat$Age) #total number of unknown data
-  
-  p_mat <- matrix(rep(NA,k_numb*N), ncol = k_numb) #Matrix of probabilites
+  known_dat <- data[data$Age != -1,] #gets all the known data
   
   #based on k_table, assign probabilites 
   p_mat <- mapply(function(mu, sigma, dat){
@@ -44,19 +42,25 @@ init_prob_ests <- function(data, k_table, k_numb){
   #Find most suitable class for each value
   unknown_dat$Age <- apply(p_mat, 1, function(x){which.max(x)})
   
-  ages <- unique(unknown_dat$Age)
-  ages <- ages[order(ages)]
+  #Combines estimated ages and actual known ages
+  allAge_dat <- unknown_dat
+  if(flag){allAge_dat <- rbind(allAge_dat, known_dat)}
+  N <- length(allAge_dat$Age)
   
+  ages <- unique(allAge_dat$Age)
+  ages <- ages[order(ages)]
+
   init_ests <- mapply(
     function(i, data){
       return(c(
-        mean(unknown_dat$Length[unknown_dat$Age == i]), 
-        k_table$sigma[i] <- sd(unknown_dat$Length[unknown_dat$Age == i]),
-        length(unknown_dat$Age[unknown_dat$Age == i]))
+        mean(allAge_dat$Length[allAge_dat$Age == i]), 
+        sd(allAge_dat$Length[allAge_dat$Age == i]),
+        length(allAge_dat$Age[allAge_dat$Age == i]))
       )
-    }, ages, MoreArgs = list(data = data))
+    }, ages, MoreArgs = list(data = allAge_dat))
   
-  return(data.frame("mu" = init_ests[1,], "sigma" = init_ests[2,], "lambda" = init_ests[3,]/N))
+  return(data.frame("mu" = init_ests[1,], "sigma" = init_ests[2,], 
+                    "lambda" = init_ests[3,]/N))
   
 }
 
@@ -67,7 +71,7 @@ prob_ests <- function(data, k_table, k_numb){
   #   Col3 - The age class they are in (k = ...?). -1 if unknown 
   
   N <- length(data$Age) #Total number of unknown ages in the thing
-
+  
   p_mat <- mapply(function(mu, sigma, data, lambda){
                   return(dnorm(data, mu, sigma) * lambda)},
                   k_table$mu, k_table$sigma, k_table$lambda,
@@ -104,7 +108,7 @@ max_ests <- function(prob_table, k_table, k_numb){
   
   #Sd Calculations
   k_table$sigma <- mapply(function(prob, mu, baseProbSumVal, lengths){
-                  return( sqrt(sum( prob * ((lengths-mu)^2) / baseProbSumVal)) )
+                  return( sqrt(sum( (prob * ((lengths-mu)^2) / baseProbSumVal))) )
                   },probs, k_table$mu, baseProbSum, MoreArgs = list(lengths = lengths))
   
   #Lambida Calculations 

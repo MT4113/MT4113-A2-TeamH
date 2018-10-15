@@ -1,11 +1,13 @@
 source("functions.R")
-teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
+teamEM <- function(data, epsilon = 1e-08, maxit = 1000, inc_known_k_init = FALSE){
   # Data:
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
   #   Col3 - The age class they are in (k = ...?). NA if unknown. k > 0  
   # epsilon:  convergence criterion
   # maxit: max iterations
+  # inc_known_k_init: True if including the values of known age classes into the 
+  #                   Initalization of mu, sigma, and lamda. Default is False 
   
   # Error Checking ----------------------------------------------------------
   #Need something to ensure that inputs are correct
@@ -26,7 +28,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000){
 
   #input - dataframe data
   #output - lamda values 
-  k_mat <- init_prob_ests(data,k_mat,k_numb) #FOR TESTING ITS COMMENTED OUT
+  k_mat <- init_prob_ests(data,k_mat,k_numb,inc_known_k_init) #FOR TESTING ITS COMMENTED OUT
   k_mat_init <- k_mat
   #input - the dataframe data 
   #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#
