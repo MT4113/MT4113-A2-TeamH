@@ -68,7 +68,7 @@ prob_ests <- function(data, k_table, k_numb){
                   k_table$mu, k_table$sigma, k_table$lambda,
                   MoreArgs = list(data=data$Length))
   
-  denomSums <- apply(p_mat, 1, sum)
+  denomSums <- rowSums(p_mat)
   
   p_mat <- apply(p_mat, 2, function(x,ds){return(x/ds)}, ds = denomSums)
 
@@ -102,8 +102,8 @@ max_ests <- function(prob_table, k_table, k_numb, flag, known_dat){
   }
   
   N <- length(lengths)
-  
-  baseProbSum<- apply(probs, 2, sum) #sums of all probs based on age class
+  probs <- data.frame(probs) #This is for the k is only one element problem
+  baseProbSum<- apply(probs[,1, drop = F], 2, sum) #sums of all probs based on age class
   
   
   #Mean Calculations
