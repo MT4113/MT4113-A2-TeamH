@@ -50,7 +50,6 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   
   # Loop --------------------------------------------------------------------
   
-
   maxit_Total <- maxit 
   ll_vec <- rep(NA, maxit_Total+1)
   maxit <- 2
@@ -60,17 +59,22 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   while((abs(ll_vec[maxit]-ll_vec[maxit-1]) > epsilon) & maxit <= maxit_Total){
     # Reassign exit conditions 
     maxit <- maxit + 1 
-    
+
     #input - the dataframe data 
     #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#
     prob_table <- prob_ests(unknown_dat, k_mat, k_numb)
+    
     #input - probabilty table and k_mat and K_numb
     #output, a new k_mat updated
     #For some reason i now fully trust this function with my 3rd nonexistent child  
     k_mat <- max_ests(prob_table, k_mat, k_numb, inc_known_k_iter, known_dat)
+    #print(system.time(prob_ests(unknown_dat, k_mat, k_numb)))
+    
     #Input - 
     #Output - values for likelihood in l2, this is LOG likelihood
+    #THIS IS WHERE THE TIMING ERROR IS LOCATED
     ll_vec[maxit] <- likelihood(unknown_dat, k_mat, k_numb)
+
   }  
   
   

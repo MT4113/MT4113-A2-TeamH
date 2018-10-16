@@ -129,14 +129,13 @@ likelihood <- function(unknown_dat, k_table, k_numb){
   #   Col3 - The age class they are in (k = ...?). -1 if unknown  
   
   init <- 0 
-  k_table_logged <- k_table
-  k_table_logged$lambda <- log(k_table_logged$lambda)
-  
-  init <- sapply(unknown_dat$Length, normalFunc, k_table = k_table_logged)
-  return(sum(init))
+  init <- apply(k_table, 1, normalFunc, x = unknown_dat$Length)
+  temp <- rowSums(init)
+  temp <- log(temp)
+  return(sum(temp))
 }
 
-normalFunc <- function(x, k_table){
-  return(sum(k_table$lambda + dnorm(x, k_table$mu, k_table$sigma, log = TRUE)))
+normalFunc <- function(k_table, x){
+  return((k_table[3]*dnorm(x, k_table[1], k_table[2])))
 }
 
