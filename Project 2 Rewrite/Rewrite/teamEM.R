@@ -25,6 +25,10 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   data$Age[is.na(data$Age)] <- -1
   data$Age <- as.factor(data$Age)
   
+  #Seperate known and unknown data
+  unknown_dat <- data[data$Age == -1,] #this can be moved up and optimized earlier since it can be used
+  known_dat <- data[data$Age != -1,]
+  
   k_numb <- length(unique(data$Age))-1 #Gives total numb of k values 
   
   #input - Dataframe data
@@ -33,15 +37,13 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
 
   #input - dataframe data
   #output - lamda values 
-  k_mat <- init_prob_ests(data,k_mat,k_numb,inc_known_k_init) #FOR TESTING ITS COMMENTED OUT
+  k_mat <- init_prob_ests(data, k_mat,k_numb, inc_known_k_init, 
+                          unknown_dat ,known_dat) #FOR TESTING ITS COMMENTED OUT
   k_mat_init <- k_mat
   #input - the dataframe data 
   #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#
   #data_probs
   
-  #Seperate known and unknown data
-  unknown_dat <- data[data$Age == -1,] #this can be moved up and optimized earlier since it can be used
-  known_dat <- data[data$Age != -1,]
   # Loop --------------------------------------------------------------------
   
   l1 <- likelihood(unknown_dat, k_mat, k_numb)

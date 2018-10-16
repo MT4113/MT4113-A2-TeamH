@@ -8,8 +8,8 @@ init_data_ests <- function(data){
   
   ages <- unique(data$Age) #Gets all the unique Ages used in k
   ages <- ages[ages != -1]  #removes unknown ages
-  ages <- ages[order(ages)] #Ensures lowest age is first to highest
-  N <- length(data[(data[,3] != -1),2]) # numb of values that are known
+  ages <- ages[order(ages)] #Ensures lowest age is first to highest. THIS CAN BE OPTIMIZED WIHT KNOWN KNOWNS
+  N <- length(data$Length[(data$Age != -1)]) # numb of values that are known
   
   init_ests <- mapply(
     function(i, data){
@@ -24,15 +24,13 @@ init_data_ests <- function(data){
   
 }
 
-init_prob_ests <- function(data, k_table, k_numb, flag){
+init_prob_ests <- function(data, k_table, k_numb, flag, 
+                           unknown_dat, known_dat){
   # Data:
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
   #   Col3 - The age class they are in (k = ...?). -1 if unknown 
-  
-  unknown_dat <- data[data$Age == -1,] #Sifts for only unknown data
-  known_dat <- data[data$Age != -1,] #gets all the known data
-  
+
   #based on k_table, assign probabilites 
   p_mat <- mapply(function(mu, sigma, dat){
     return(dnorm(dat, mu, sigma))
@@ -96,7 +94,7 @@ max_ests <- function(prob_table, k_table, k_numb, flag, known_dat){
   probs <- prob_table[,c(-1,-2)] #simply to only probabilites 
   lengths <- prob_table$Length #Can add lengths and stuff to the bottom if we want to extend for true values
   
-  if(flag){
+  if(flag){  #Possible to optimize by storing the code and then just appending the df 
     prob_table_known <- matrix(rep(0,length(known_dat$Age) * k_numb), ncol = k_numb)
     
     unique_Ages <- unique(known_dat$Age)
