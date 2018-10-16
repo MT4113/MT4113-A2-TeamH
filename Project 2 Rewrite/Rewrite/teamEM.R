@@ -1,7 +1,8 @@
 load("FishLengths.RData") 
 teamEM <- function(data, epsilon = 1e-08, maxit = 1000, 
                    inc_known_k_init = FALSE, inc_known_k_iter = FALSE,
-                   inc_known_as_unkown = FALSE){
+                   inc_known_as_unknown_init = FALSE, 
+                   inc_known_as_unknown_iter = FALSE){
   
   source("functions.R", local = TRUE)
   # Data:
@@ -16,17 +17,25 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #                   maximization of mu, sigma, and lamda. Default is False 
   # inc_known_as_unknown_iter: Includes the known values in the calculation of the 
   #                       posterior as unknown values in the init step
-  #                       Will not work if inc_known_k_iter and 
-  #                       inc_known_k_init are also TRUE (this is due 
+  #                       Will not work if inc_known_k_iter is 
+  #                       also TRUE (this is due 
   #                       to double adding)
   # inc_known_as_unknown_init: Includes the known values in the calculation of the 
   #                       posterior as unknown values. Will not work if 
-  #                       inc_known_k_iter and inc_known_k_init are also 
+  #                       inc_known_k_init are also 
   #                       TRUE (this is due to double adding)
   # Error Checking ----------------------------------------------------------
   #Need something to ensure that inputs are correct
   #Also need to ensure ages are != -1 and are positive
   #Also need to ensure columns are named aptly, as we call by NAME
+  
+  #data, dataframe with columns Age, and Lengths and approriately named
+    #in Lengths, no null values
+    #in Age, nonnull values are all >- 0. Cannot be all null value
+      #Must be one unique non-null age class
+  
+  
+  
   
   # Data initalization ------------------------------------------------------
   
@@ -47,23 +56,26 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #input - Dataframe data
   #Out - matrix containing the estimates of stdev, mu and lambida
   k_mat <- init_data_ests(data, uniq_ages)
-
+  
+  unknown_dat_case <- unknown_dat
+  if(inc_known_as_unknown_init){unknown_dat_case <- rbind(unknown_dat_case, known_dat)}
+  
   #input - dataframe data
   #output - lamda values 
   k_mat <- init_prob_ests(k_mat,k_numb, inc_known_k_init, 
-                          unknown_dat ,known_dat, uniq_ages) #FOR TESTING ITS COMMENTED OUT
+                          unknown_dat_case ,known_dat, uniq_ages) #FOR TESTING ITS COMMENTED OUT
   k_mat_init <- k_mat
-  #input - the dataframe data 
-  #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#
-  #data_probs
+
   
   # Loop --------------------------------------------------------------------
   
-  maxit_Total <- maxit 
+  maxit_Total <- maxit + 1
   ll_vec <- rep(NA, maxit_Total+1)
   maxit <- 2
   ll_vec[maxit] <- likelihood(unknown_dat, k_mat, k_numb)
   ll_vec[maxit - 1] <- ll_vec[maxit] + (2*epsilon)
+  
+  if(inc_known_as_unknown_iter){unknown_dat <- rbind(unknown_dat,known_dat)}
 
   while((abs(ll_vec[maxit]-ll_vec[maxit-1]) > epsilon) & maxit <= maxit_Total){
     # Reassign exit conditions 
@@ -94,6 +106,6 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
                  inits = k_mat_init, 
                  converged = converged,
                  posterior = head(prob_table), #This table needs to be cleaned
-                 likelihood = ll_vec[c(2:maxit)]) 
+                 likelihood = ll_vec[c(3:maxit)]) 
   return(output)
 }
