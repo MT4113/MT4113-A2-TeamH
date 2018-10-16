@@ -1,5 +1,17 @@
 df_check <- function(df){
+  flag = FALSE
+  colNames <- colnames(df)
+  if(is.element("Age", colNames) & is.element("Length", colNames)){
+    if(is.numeric(df$Age) & is.numeric(df$Length)){ #values are numeric
+     if(length(df$Length[is.na(df$Length)]) == 0){ #No nulls in Length 
+      if(length(unique(df$Age)) >= 1 & (length(df$Age[is.na(df$Age)]) > 0) ){#Must be at least one Unique age
+        flag = TRUE
+      } 
+     }
+    }
+  }
   
+  return(flag)
 }
 
 boolean_check <- function(bool){

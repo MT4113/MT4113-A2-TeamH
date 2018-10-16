@@ -35,6 +35,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
     #in Lengths, no null values
     #in Age, nonnull values are all >- 0. Cannot be all null value
       #Must be one unique non-null age class
+  if(!df_check(data)){stop("Invalid dataset for data")}
   
   #Numeric Check
   if (!(numeric_Check(epsilon, F, T))){stop("Invalid arguments for epsilon")}
@@ -45,6 +46,15 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   if(!(boolean_check(inc_known_k_init))){stop("Invalid arguments for inc_known_k_init")}
   if(!(boolean_check(inc_known_as_unknown_iter))){stop("Invalid arguments for inc_known_as_unknown_iter")}
   if(!(boolean_check(inc_known_as_unknown_init))){stop("Invalid arguments for inc_known_as_unknown_init")}
+  
+  #Checking to ensure that we are not including both known as known and unknown 
+  if(inc_known_as_unknown_init & inc_known_k_init){
+    stop("inc_known_as_unknown_init and inc_known_k_init are both True. Only one can be True.")
+  }
+  if(inc_known_as_unknown_iter & inc_known_k_iter){
+    stop("inc_known_as_unknown_iter and inc_known_k_iter are both True. Only one can be True.")
+  }
+  
   # Data initalization ------------------------------------------------------
   
   #Sets Unknown ages to age 0. 
@@ -65,14 +75,20 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #Out - matrix containing the estimates of stdev, mu and lambida
   k_mat <- init_data_ests(data, uniq_ages)
   
+  if(length(k_mat$sigma[is.na(k_mat$sigma)]) > 0){stop("Insufficent known ages for initialization")}
+  
   unknown_dat_case <- unknown_dat
   if(inc_known_as_unknown_init){unknown_dat_case <- rbind(unknown_dat_case, known_dat)}
   
   #input - dataframe data
   #output - lamda values 
-  k_mat <- init_prob_ests(k_mat,k_numb, inc_known_k_init, 
+  k_mat2 <- init_prob_ests(k_mat,k_numb, inc_known_k_init, 
                           unknown_dat_case ,known_dat, uniq_ages) #FOR TESTING ITS COMMENTED OUT
-  k_mat_init <- k_mat
+  k_mat_init <- k_mat2
+  
+  if(length(k_mat2$sigma[is.na(k_mat2$sigma)]) > 0){#insufficent estimates to get sigma inital estimate 
+    k_mat2$sigma[is.na(k_mat2$sigma)] <- k_mat$sigma[is.na(k_mat2$sigma)]
+  }
 
   
   # Loop --------------------------------------------------------------------
@@ -83,9 +99,15 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   ll_vec[maxit] <- likelihood(unknown_dat, k_mat, k_numb)
   ll_vec[maxit - 1] <- ll_vec[maxit] + (2*epsilon)
   
+  if(is.infinite(ll_vec[maxit])){#This is in case there is a numerical underflow 
+    #problem from too few samples and ranges of data that are too large 
+    stop("Likelihood estimates cannot be determined")}
+  
   if(inc_known_as_unknown_iter){unknown_dat <- rbind(unknown_dat,known_dat)}
 
   while((abs(ll_vec[maxit]-ll_vec[maxit-1]) > epsilon) & maxit <= maxit_Total){
+    print(ll_vec)
+    
     # Reassign exit conditions 
     maxit <- maxit + 1 
 
@@ -109,11 +131,16 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   
   converged <- ifelse(abs(ll_vec[maxit]-ll_vec[maxit-1]) > epsilon, FALSE, TRUE)
   
+  # Formatting the outptu of the posterior
+  prob_out <- prob_table[,c(-1,-2), drop = F]
+  colnames(prob_out) <- uniq_ages
+  rownames(prob_out) <- c() #Gets rid of row names, so not 100% sure if needed, but may be useful
+  
   # Return conditions 
   output <- list(estimates = k_mat, 
                  inits = k_mat_init, 
                  converged = converged,
-                 posterior = head(prob_table), #This table needs to be cleaned
+                 posterior = prob_out, #This table needs to be cleaned
                  likelihood = ll_vec[c(3:maxit)]) 
   return(output)
 }
