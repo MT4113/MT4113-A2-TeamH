@@ -29,16 +29,20 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   unknown_dat <- data[data$Age == -1,] #this can be moved up and optimized earlier since it can be used
   known_dat <- data[data$Age != -1,]
   
-  k_numb <- length(unique(data$Age))-1 #Gives total numb of k values 
+  #Gets all the unique age catagories found in the dataset 
+  uniq_ages <- unique(data$Age)
+  uniq_ages <-uniq_ages[order(uniq_ages)]
+  uniq_ages <- uniq_ages[uniq_ages != -1]
+  k_numb <- length(uniq_ages) #Gives total numb of k values not including -1 
   
   #input - Dataframe data
   #Out - matrix containing the estimates of stdev, mu and lambida
-  k_mat <- init_data_ests(data)
+  k_mat <- init_data_ests(data, uniq_ages)
 
   #input - dataframe data
   #output - lamda values 
-  k_mat <- init_prob_ests(data, k_mat,k_numb, inc_known_k_init, 
-                          unknown_dat ,known_dat) #FOR TESTING ITS COMMENTED OUT
+  k_mat <- init_prob_ests(k_mat,k_numb, inc_known_k_init, 
+                          unknown_dat ,known_dat, uniq_ages) #FOR TESTING ITS COMMENTED OUT
   k_mat_init <- k_mat
   #input - the dataframe data 
   #output - dataframe of col1 - ID col2 - lengths, col3 onwards, one column for each inital probabilty labeled X#

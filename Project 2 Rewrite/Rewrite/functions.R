@@ -1,14 +1,11 @@
 
-init_data_ests <- function(data){
+init_data_ests <- function(data, ages){
   # Initalizes the data, returns table of mu, sigma and lambda estimates based on known values
   # Data:
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
   #   Col3 - The age class they are in (k = ...?). -1 if unknown  
   
-  ages <- unique(data$Age) #Gets all the unique Ages used in k
-  ages <- ages[ages != -1]  #removes unknown ages
-  ages <- ages[order(ages)] #Ensures lowest age is first to highest. THIS CAN BE OPTIMIZED WIHT KNOWN KNOWNS
   N <- length(data$Length[(data$Age != -1)]) # numb of values that are known
   
   init_ests <- mapply(
@@ -24,8 +21,8 @@ init_data_ests <- function(data){
   
 }
 
-init_prob_ests <- function(data, k_table, k_numb, flag, 
-                           unknown_dat, known_dat){
+init_prob_ests <- function(k_table, k_numb, flag, 
+                           unknown_dat, known_dat, ages){
   # Data:
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
@@ -43,9 +40,6 @@ init_prob_ests <- function(data, k_table, k_numb, flag,
   allAge_dat <- unknown_dat
   if(flag){allAge_dat <- rbind(allAge_dat, known_dat)}
   N <- length(allAge_dat$Age)
-  
-  ages <- unique(allAge_dat$Age)
-  ages <- ages[order(ages)]
 
   init_ests <- mapply(
     function(i, data){
