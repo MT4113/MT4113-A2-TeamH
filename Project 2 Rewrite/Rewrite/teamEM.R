@@ -1,6 +1,8 @@
-source("functions.R")
+load("FishLengths.RData") 
 teamEM <- function(data, epsilon = 1e-08, maxit = 1000, 
                    inc_known_k_init = FALSE, inc_known_k_iter = FALSE){
+  
+  source("functions.R", local = TRUE)
   # Data:
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 

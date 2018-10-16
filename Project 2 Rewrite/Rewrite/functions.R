@@ -1,4 +1,3 @@
-load("FishLengths.RData") 
 
 init_data_ests <- function(data){
   # Initalizes the data, returns table of mu, sigma and lambda estimates based on known values
