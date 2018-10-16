@@ -29,14 +29,22 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #Also need to ensure ages are != -1 and are positive
   #Also need to ensure columns are named aptly, as we call by NAME
   
+  source("ErrorChecks.R", local = TRUE)
+  
   #data, dataframe with columns Age, and Lengths and approriately named
     #in Lengths, no null values
     #in Age, nonnull values are all >- 0. Cannot be all null value
       #Must be one unique non-null age class
   
+  #Numeric Check
+  if (!(numeric_Check(epsilon, F, T))){stop("Invalid arguments for epsilon")}
+  if (!(numeric_Check(maxit, T, T))){stop("Invalid arguments for maxit")}
   
-  
-  
+  #Boolean Checks
+  if(!(boolean_check(inc_known_k_iter))){stop("Invalid arguments for inc_known_k_iter")}
+  if(!(boolean_check(inc_known_k_init))){stop("Invalid arguments for inc_known_k_init")}
+  if(!(boolean_check(inc_known_as_unknown_iter))){stop("Invalid arguments for inc_known_as_unknown_iter")}
+  if(!(boolean_check(inc_known_as_unknown_init))){stop("Invalid arguments for inc_known_as_unknown_init")}
   # Data initalization ------------------------------------------------------
   
   #Sets Unknown ages to age 0. 
