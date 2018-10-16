@@ -106,8 +106,6 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   if(inc_known_as_unknown_iter){unknown_dat <- rbind(unknown_dat,known_dat)}
 
   while((abs(ll_vec[maxit]-ll_vec[maxit-1]) > epsilon) & maxit <= maxit_Total){
-    print(ll_vec)
-    
     # Reassign exit conditions 
     maxit <- maxit + 1 
 
