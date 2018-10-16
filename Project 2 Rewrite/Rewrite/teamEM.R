@@ -2,7 +2,8 @@ load("FishLengths.RData")
 teamEM <- function(data, epsilon = 1e-08, maxit = 1000, 
                    inc_known_k_init = FALSE, inc_known_k_iter = FALSE,
                    inc_known_as_unknown_init = FALSE, 
-                   inc_known_as_unknown_iter = FALSE){
+                   inc_known_as_unknown_iter = FALSE, 
+                   roundAge = FALSE){
   
   source("functions.R", local = TRUE)
   # Data:
@@ -24,6 +25,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #                       posterior as unknown values. Will not work if 
   #                       inc_known_k_init are also 
   #                       TRUE (this is due to double adding)
+  # roundAge: Rounds age to nearest whole number if True. Default False
   # Error Checking ----------------------------------------------------------
   #Need something to ensure that inputs are correct
   #Also need to ensure ages are != -1 and are positive
@@ -57,8 +59,11 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   
   # Data initalization ------------------------------------------------------
   
-  #Sets Unknown ages to age 0. 
+  #Sets Unknown ages to age -1. 
   data$Age[is.na(data$Age)] <- -1
+  
+  if(roundAge){data$age <- round(data$Age)} #Rounds ages if it should be rounded
+  
   data$Age <- as.factor(data$Age)
   
   #Seperate known and unknown data
