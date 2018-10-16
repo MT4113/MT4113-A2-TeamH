@@ -1,6 +1,7 @@
 load("FishLengths.RData") 
 teamEM <- function(data, epsilon = 1e-08, maxit = 1000, 
-                   inc_known_k_init = FALSE, inc_known_k_iter = FALSE){
+                   inc_known_k_init = FALSE, inc_known_k_iter = FALSE,
+                   inc_known_as_unkown = FALSE){
   
   source("functions.R", local = TRUE)
   # Data:
@@ -13,7 +14,15 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #                   Initalization of mu, sigma, and lamda. Default is False 
   # inc_known_k_iter: True if including values of known age classes into the 
   #                   maximization of mu, sigma, and lamda. Default is False 
-  
+  # inc_known_as_unknown_iter: Includes the known values in the calculation of the 
+  #                       posterior as unknown values in the init step
+  #                       Will not work if inc_known_k_iter and 
+  #                       inc_known_k_init are also TRUE (this is due 
+  #                       to double adding)
+  # inc_known_as_unknown_init: Includes the known values in the calculation of the 
+  #                       posterior as unknown values. Will not work if 
+  #                       inc_known_k_iter and inc_known_k_init are also 
+  #                       TRUE (this is due to double adding)
   # Error Checking ----------------------------------------------------------
   #Need something to ensure that inputs are correct
   #Also need to ensure ages are != -1 and are positive
