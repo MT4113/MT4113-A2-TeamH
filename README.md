@@ -53,7 +53,7 @@
 
 ## Task 6: Work attribution
 
-- Statement of original work
+- # I confirm that this repository is the work of our team, except where clearly indicated in the text.
 
 - In one sentence per team member, describe who did what (e.g., A wrote function x, tested function y, documented function z).
 
