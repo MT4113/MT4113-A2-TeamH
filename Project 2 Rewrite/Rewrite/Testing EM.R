@@ -1,5 +1,6 @@
 source("ErrorChecks.R", local = TRUE)
 source("teamEM.R", local = TRUE)
+source("functions.R", local = TRUE)
 
 #-------------------------Generating Testing DataFrames-------------------------
 
