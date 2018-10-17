@@ -81,19 +81,29 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #Out - matrix containing the estimates of stdev, mu and lambida
   k_mat <- init_data_ests(data, uniq_ages)
   
-  if(length(k_mat$sigma[is.na(k_mat$sigma)]) > 0){stop("Insufficent known ages for initialization")}
-  
+  if(length(k_mat$sigma[is.na(k_mat$sigma)]) > 0){ #If sigma cant be determined
+    k_mat$sigma[is.na(k_mat$sigma)] <- 1
+    warning(paste("Insuffient inital observations to generate an estimate for" ,
+                  "all values of sigma.\n  Undertermined values of Sigma are", 
+                  "set to 1 during initalization."))
+  }
+
   unknown_dat_case <- unknown_dat
   if(inc_known_as_unknown_init){unknown_dat_case <- rbind(known_dat, unknown_dat_case)}
   
   #input - dataframe data
   #output - lamda values 
+
   k_mat2 <- init_prob_ests(k_mat,k_numb, inc_known_k_init, 
                           unknown_dat_case ,known_dat, uniq_ages) #FOR TESTING ITS COMMENTED OUT
   k_mat_init <- k_mat2
+
   
   if(length(k_mat2$sigma[is.na(k_mat2$sigma)]) > 0){#insufficent estimates to get sigma inital estimate 
     k_mat2$sigma[is.na(k_mat2$sigma)] <- k_mat$sigma[is.na(k_mat2$sigma)]
+    warning(paste("Insuffient estimated observations to generate an estimate ",  
+              "for sigma.\n  Undertermined values of Sigma are set to initally ", 
+              "calculated estimates shown in $init"))
   }
 
   
@@ -107,7 +117,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   
   if(is.infinite(ll_vec[maxit])){#This is in case there is a numerical underflow 
     #problem from too few samples and ranges of data that are too large 
-    stop("Likelihood estimates cannot be determined")}
+    stop("Numerical overflow - Likelihood estimates cannot be determined")}
   
   if(inc_known_as_unknown_iter){unknown_dat <- rbind(known_dat, unknown_dat)}
 
@@ -147,6 +157,9 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
 
   colnames(prob_out) <- uniq_ages
   rownames(prob_out) <- c() #Gets rid of row names, so not 100% sure if needed, but may be useful
+  
+  rownames(k_mat) <- uniq_ages
+  rownames(k_mat_init) <- uniq_ages
   
   # Return conditions 
   output <- list(estimates = k_mat, 

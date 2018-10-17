@@ -27,29 +27,30 @@ init_prob_ests <- function(k_table, k_numb, flag,
   #   Col1 - the fish IDs
   #   Col2 - The Fish lengths 
   #   Col3 - The age class they are in (k = ...?). -1 if unknown 
-
+ 
   #based on k_table, assign probabilites 
   p_mat <- mapply(function(mu, sigma, dat){
     return(dnorm(dat, mu, sigma))
   },k_table$mu, k_table$sigma ,MoreArgs = list(dat = unknown_dat$Length))
-
+  
   #Find most suitable class for each value
-  unknown_dat$Age <- apply(p_mat, 1, function(x){which.max(x)})
+  unknown_dat$Age <- apply(p_mat, 1, function(x){ages[which.max(x)]})
   
   #Combines estimated ages and actual known ages
   allAge_dat <- unknown_dat
   if(flag){allAge_dat <- rbind(allAge_dat, known_dat)}
   N <- length(allAge_dat$Age)
-
+  
+  
   init_ests <- mapply(
     function(i, data){
       return(c(
-        mean(allAge_dat$Length[allAge_dat$Age == i]), 
-        sd(allAge_dat$Length[allAge_dat$Age == i]),
-        length(allAge_dat$Age[allAge_dat$Age == i]))
+        mean(data$Length[data$Age == i]), 
+        sd(data$Length[data$Age == i]),
+        length(data$Age[data$Age == i]))
       )
     }, ages, MoreArgs = list(data = allAge_dat))
-  
+
   return(data.frame("mu" = init_ests[1,], "sigma" = init_ests[2,], 
                     "lambda" = init_ests[3,]/N))
   
