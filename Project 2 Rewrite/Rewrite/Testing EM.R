@@ -88,6 +88,8 @@ imp.test.em <- function(A){
   change.from.inits <- abs(result$estimates$mu-result$inits$mu)/result$inits$mu
   
   # shape testing specific
+  ### I need to find a way to generalise this that doesn't result in a bunch of NAs 
+  ### have tried fully vectorised, loops, looops-on-loops and it all seems to breakdown after a couple of iterations.
   result <- teamEM(x)
   base <- seq(0, 100, by = .1)
   y1 <- result$estimates$lambda[1]*dnorm(base, result$estimates$mu[1], result$estimates$sigma[1])
