@@ -3,6 +3,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
                    inc_known_k_init = FALSE, inc_known_k_iter = FALSE,
                    inc_known_as_unknown_init = FALSE, 
                    inc_known_as_unknown_iter = FALSE, 
+                   inc_known_in_ll = FALSE,
                    roundAge = FALSE){
   
   source("functions.R", local = TRUE)
@@ -51,10 +52,13 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   
   #Checking to ensure that we are not including both known as known and unknown 
   if(inc_known_as_unknown_init & inc_known_k_init){
-    stop("inc_known_as_unknown_init and inc_known_k_init are both True. Only one can be True.")
+    stop("inc_known_as_unknown_init and inc_known_k_init are both TRUE Only one can be TRUE")
   }
   if(inc_known_as_unknown_iter & inc_known_k_iter){
-    stop("inc_known_as_unknown_iter and inc_known_k_iter are both True. Only one can be True.")
+    stop("inc_known_as_unknown_iter and inc_known_k_iter are both TRUE Only one can be TRUE")
+  }
+  if(inc_known_in_ll & inc_known_as_unknown_iter){
+    stop("inc_known_in_ll & inc_known_as_unknown_iter are both TRUE only one can be TRUE")
   }
   
   # Data initalization ------------------------------------------------------
@@ -139,6 +143,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
     #Output - values for likelihood in l2, this is LOG likelihood
     #THIS IS WHERE THE TIMING ERROR IS LOCATED
     ll_vec[maxit] <- likelihood(unknown_dat, k_mat, k_numb)
+    if(inc_known_in_ll){ll_vec[maxit] <- likelihood(known_dat, k_mat, k_numb)}
 
   }  
   
