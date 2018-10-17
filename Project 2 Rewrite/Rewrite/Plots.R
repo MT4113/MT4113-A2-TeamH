@@ -7,9 +7,15 @@ Fish_Length <- x
 library(ggplot2)
 #BarPlot between Fish Length and Age
 Plot1 <- ggplot(data = Fish_Length, aes(x = Age, y = Length)) +
+<<<<<<< HEAD
          geom_bar(stat= " identity ", fill = " steelblue ") +
          xlab(" Age ") + ylab(" Fish Length in Cm ") + 
          theme_minimal() + ggtitle(" Barplot between Fish Length and Age ")
+=======
+         geom_bar(stat= "identity", fill = " steelblue ") +
+         xlab(" Age ") + ylab(" Fish Length in Cm ")+ 
+         theme_minimal() + ggtitle(" Barplot between Fish Length and Age")
+>>>>>>> e8c9a11bed5620e4a902506892213a026993ea48
 Plot1
 #Scatterplot between Fish Length and Age
 Plot2 <- ggplot(Fish_Length, aes(Age, Length))+
@@ -23,6 +29,7 @@ Plot3 <- ggplot(Fish_Length, aes(x = Length)) +
          geom_histogram(binwidth = 3) +
          ggtitle(" Frequency histogram of Fish Length ") +
          xlab(" Fish Length in Cm")+ ylab(" Count ")
+<<<<<<< HEAD
 Plot3
 
 #Creating X,Y to get the Normal Curve of Fish Length
@@ -38,4 +45,16 @@ Plot4 <- ggplot(Fish_Length, aes(x = Length, y = ..density.. )) +
 
 Plot4        
      
+=======
+Plot2
+#Density Histogram of Fish Length          
+Plot3 <- ggplot(Fish_Length, aes(x = Length)) +
+         geom_histogram(binwidth = (5), colour = "black", fill = "white")
+         ggtitle(" Frequency histogram of Fish Length ") +
+         xlab(" Fish Length in Cm")+ ylab(" Count ")+ theme_dark()
+        
+Plot3        
+        
+      
+>>>>>>> e8c9a11bed5620e4a902506892213a026993ea48
                  

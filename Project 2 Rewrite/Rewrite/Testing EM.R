@@ -1,7 +1,7 @@
 source("ErrorChecks.R", local = TRUE)
 source("teamEM.R", local = TRUE)
 
-# Generating Testing DataFrames:
+#-------------------------Generating Testing DataFrames-------------------------
 
 gen.test.data <- function(continuous = FALSE){
   # Aim is to generate a random data frame of numeric values.
@@ -49,47 +49,101 @@ gen.test.data <- function(continuous = FALSE){
 
 #gen.test.data()
 
-
-# Function for testing the Algorith Implementation:
+#---------------Function for testing the Algorith Implementation----------------
 
 imp.test.em <- function(A){
-  # Currently assuming discrete data for Age values
+  # Aiming to show for each input data frame, "A", that the outputs given by the 
+  # teamEM function are as would be expected for the data frame.
+  # Input:
+  #       "A": the data frame that you want to trial.
+  # Outputs:
+  #       "conclusion": a list that displays the results of the tests on 
+  #                     features of the output of teamEM(A).
+  
   result <- teamEM(A)
   
+  uniq_ages <- unique(A$Age)         
+  uniq_ages <-uniq_ages[order(uniq_ages)]
+  uniq_ages <- uniq_ages[uniq_ages != -1]
+  k_numb <- length(uniq_ages)
+  
   #output class checks: perfect score is 5
-  class.check <- rep(0, 5)
-  if (class(result$estimates) != numeric){class.check[1] = FALSE}
-  if (class(result$inits) != numeric){class.check[2] = FALSE}
-  if (class(result$posterior) != numeric){class.check[3] = FALSE}
-  if (class(result$likelihood) != numeric){class.check[4] = FALSE}
-  if (class(result$converged)!= boolean){class.check[5] = FALSE}
-  class.check = sum(class.check)
-  class.result <- 0
-  if (class.check == 5){class.result = "All outputs in form expected."}
-  else{class.result = "One or more outputs in a form unexpected."}
-  
+  # class.check <- rep(0, 5)
+  # if (sapply(result$estimates$mu, class) != rep("numeric", k_numb)){class.check[1] = FALSE}
+  # if (sapply(result$estimates$sigma, class) != numeric){class.check[1] = FALSE}
+  # if (sapply(result$estimates$lambda, class) != numeric){class.check[1] = FALSE}
+  # 
+  # if (sapply(result$inits, class) != numeric){class.check[2] = FALSE}
+  # if (sapply(result$posterior, class) != numeric){class.check[3] = FALSE}
+  # if (sapply(result$likelihood, class) != numeric){class.check[4] = FALSE}
+  # if (sapply(result$converged, class)!= boolean){class.check[5] = FALSE}
+  # class.check = sum(class.check)
+  # class.result <- 0
+  # if (class.check == 5){class.result = "All outputs in form expected."}
+  # else{class.result = "One or more outputs in a form unexpected."}
+  # 
   #behavior testing, are A's results as expected?:
-  #range testing:
-  within.range.age <- round(seq(min(A$Age), max(A$Age))) #Age bounds, rounded
-  within.range.length <- c(min(A$Length), max(A$Length)) #Length bounds
-  within.range.ID <- c(min(A$FishID), max(A$FishID))
-  num.of.cat <- abs(within.range.age[2]-within.range.age[1])
-  behaviour.range <- matrix(rep(0, num.of.cat*2), nrow = num.of.cat, ncol = 2)
-  
-  for (i in range(num.of.cat)){
-    if (result$estimates$mu[i] <= within.range.length[2] && 
-        result$estimates$mu[i] >= within.range.length[1]){behaviour.range[i,1] = TRUE}
-    if (result$inits$mu[i] <= within.range.length[2] && 
-        result$inits$mu[i] >= within.range.length[1]){behaviour.range[i,2] = TRUE}
-    #check known data to compare to initials and final estimates
-    
-  }
 
+  behaviour <- matrix(rep(0, k_numb*2), nrow = k_numb, ncol = 2)
   
-  #shape testing:
+  #
+    
+  #check known data to compare to initials and final estimates
+  change.from.inits <- abs(result$estimates$mu-result$inits$mu)/result$inits$mu
+  
+  #shape testing
+  
+  #print(result)
+  base <- seq(0, 100, by = .1)
+  y <- matrix(rep(0, k_numb*length(base)), nrow = k_numb, ncol = length(base))
+  z <- matrix(rep(0, k_numb*length(base)), nrow = k_numb, ncol = length(base))
+  #print(result$estimates$lambda[1])
+  #print(dnorm(base, result$estimates$mu[1], result$estimates$sigma[1]))
+  #print(result$estimates$lambda[1]*dnorm(base, result$estimates$mu[1], result$estimates$sigma[1]))
+  for (i in range(k_numb)){
+    y[i,] <- result$estimates$lambda[i]*dnorm(base, result$estimates$mu[i], result$estimates$sigma[i])
+    z[i,] <- result$inits$lambda[i]*dnorm(base, result$inits$mu[i], result$inits$sigma[i])
+  }
+  y[1,] <- result$estimates$lambda[i]*dnorm(base, result$estimates$mu[i], result$estimates$sigma[i])
+  print(y[1,])
+  
+  par(mfrow = c(1,1))
+  xdata <- x$Length
+  plot(base, y = colSums(y), col = "red", ylim = c(0,1), type =  "l", xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
+  lines(base, y = colSums(z), col = "blue" )
+  legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
+         col = c("red", "blue"), lty = 1:1, cex = .75)
+  
+  par(mfrow = c(1,1))
+  
   #normality test on each of the age categories and display
   
-  conclusion <- list(classCheck = class.result, behaviorCheck = behaviour)
+  conclusion <- list(classCheck = class.result, behaviorCheck = behaviour.range)
   
   return(conclusion)
 }
+
+
+# shape testing specific
+result <- teamEM(x)
+base <- seq(0, 100, by = .1)
+y1 <- result$estimates$lambda[1]*dnorm(base, result$estimates$mu[1], result$estimates$sigma[1])
+y2 <- result$estimates$lambda[2]*dnorm(base, result$estimates$mu[2], result$estimates$sigma[2])
+y3 <- result$estimates$lambda[3]*dnorm(base, result$estimates$mu[3], result$estimates$sigma[3])
+#print(y1+y2+y3)
+
+z1 <- result$inits$lambda[1]*dnorm(base, result$inits$mu[1], result$inits$sigma[1])
+z2 <- result$inits$lambda[2]*dnorm(base, result$inits$mu[2], result$inits$sigma[2])
+z3 <- result$inits$lambda[3]*dnorm(base, result$inits$mu[3], result$inits$sigma[3])
+#print(z1+z2+z3)
+
+par(mfrow = c(1,1))
+xdata <- x$Length
+
+plot(base, y = y1 + y2 + y3, col = "red", type =  "l", xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
+lines(base, y = z1 + z2 + z3, col = "blue" )
+legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
+       col = c("red", "blue"), lty = 1:1, cex = .75)
+
+par(mfrow = c(1,1))
+
