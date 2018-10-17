@@ -89,25 +89,19 @@ imp.test.em <- function(A){
   change.from.inits <- abs(result$estimates$mu-result$inits$mu)/result$inits$mu
   
   # shape testing specific
-  ### I need to find a way to generalise this that doesn't result in a bunch of NAs 
-  ### have tried fully vectorised, loops, looops-on-loops and it all seems to breakdown after a couple of iterations.
   result <- teamEM(x)
-  base <- seq(0, 100, by = .1)
-  y1 <- result$estimates$lambda[1]*dnorm(base, result$estimates$mu[1], result$estimates$sigma[1])
-  y2 <- result$estimates$lambda[2]*dnorm(base, result$estimates$mu[2], result$estimates$sigma[2])
-  y3 <- result$estimates$lambda[3]*dnorm(base, result$estimates$mu[3], result$estimates$sigma[3])
-  #print(y1+y2+y3)
-  
-  z1 <- result$inits$lambda[1]*dnorm(base, result$inits$mu[1], result$inits$sigma[1])
-  z2 <- result$inits$lambda[2]*dnorm(base, result$inits$mu[2], result$inits$sigma[2])
-  z3 <- result$inits$lambda[3]*dnorm(base, result$inits$mu[3], result$inits$sigma[3])
-  #print(z1+z2+z3)
+  y <- mapply(function(mu,sigma,lambda, base){return(lambda*dnorm(base,mu,sigma))}, result$estimates$mu, 
+              result$estimates$sigma, result$estimates$lambda, 
+              MoreArgs=list(base = seq(0, 100, by = .1)))
+  z <- mapply(function(mu,sigma,lambda, base){return(lambda*dnorm(base,mu,sigma))}, result$inits$mu, 
+              result$inits$sigma, result$inits$lambda, 
+              MoreArgs=list(base = seq(0, 100, by = .1)))
   
   par(mfrow = c(1,1))
   xdata <- x$Length
   
-  plot(base, y = y1 + y2 + y3, col = "red", type =  "l", xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
-  lines(base, y = z1 + z2 + z3, col = "blue" )
+  plot(base, y = rowSums(y), col = "red", type =  "l", xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
+  lines(base, y = rowSums(z), col = "blue" )
   legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
          col = c("red", "blue"), lty = 1:1, cex = .75)
   
