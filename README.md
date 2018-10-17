@@ -11,8 +11,8 @@
 
 - Create two plots of the data: one with age on the x-axis and length on the y-axis, and one with length on the x-axis and frequency on the y-axis.  Add axis labels and any additional information you think is relevant (e.g., average length-at-age). Include your figure in your README file like this: 
 
-![Fig1](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Figures/Figure1.png)
-![Fig2](https://github.com/MT4113/2018/blob/master/Assignments/A2/Figures/assignment2Rplot.png)
+![Fig1](https://github.com/MT4113/2018/blob/master/Assignments/A2/Figures/assignment2Rplot.png)
+
 - Comment on the data and plots.  Describe the properties of the data (max 250 words).
 
 
