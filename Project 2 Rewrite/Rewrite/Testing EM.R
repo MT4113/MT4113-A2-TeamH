@@ -50,6 +50,7 @@ gen.test.data <- function(continuous = FALSE){
 
 #gen.test.data()
 
+
 #---------------Function for testing the Algorith Implementation----------------
 
 imp.test.em <- function(A){
@@ -60,6 +61,14 @@ imp.test.em <- function(A){
   # Outputs:
   #       "conclusion": a list that displays the results of the tests on 
   #                     features of the output of teamEM(A).
+  #                     "classCheck": confirming values belong to expected class.
+  #                                   If 1 then that segment of teamEM returned
+  #                                   in the class expected.
+  #                     "behaviourCheck": comment on variation between initial 
+  #                                       estimates and final estimates
+  #                     "differencePercentage": diff in the closed integral of 
+  #                                       each curve as a percentage of closed 
+  #                                       integral of the initial estiamted pdf.
   
   result <- teamEM(A)
   
@@ -82,11 +91,6 @@ imp.test.em <- function(A){
   else{class.result = "One or more outputs in a form unexpected."}
 
   #behavior testing, are A's results as expected?:
-
-  behaviour <- matrix(rep(0, k_numb * 2), nrow = k_numb, ncol = 2)
-  
-  #check known data to compare to initials and final estimates
-  change.from.inits <- abs(result$estimates$mu-result$inits$mu)/result$inits$mu
   
   # shape testing specific
   result <- teamEM(x)
@@ -100,20 +104,28 @@ imp.test.em <- function(A){
   par(mfrow = c(1,1))
   xdata <- x$Length
   
-  plot(base, y = rowSums(y), col = "red", type =  "l", xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
+  plot(base, y = rowSums(y), col = "red", type =  "l", ylim = c(0,.04), xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
   lines(base, y = rowSums(z), col = "blue" )
   legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
          col = c("red", "blue"), lty = 1:1, cex = .75)
   
   par(mfrow = c(1,1))
   
+  #check known data to compare to initials and final estimates
   difference = abs(sum((y1+y2+y3) - (z1+z2+z3)))
-  relative.diff <- difference/sum(z1+z2+z3)
-  #normality test on each of the age categories and display
+  relative.diff <- difference/sum(z1+z2+z3)*100
   
-  conclusion <- list(classCheck = class.result, behaviorCheck = behaviour, differenceToEnd = relative.diff)
+  behaviour <- 0
+  if (relative.diff > 10){behaviour = "Large variation between initial estimated distribtion and final estimated distribution."}
+  if(relative.diff <= 10){behaviour = "Small variation between initial estimated distribtion and final estimated distribution."}
+  
+  
+  conclusion <- list(classResult = class.result, classCheck = class.check, behaviourCheck = behaviour, differencePercentage = c(relative.diff, "%"))
   
   return(conclusion)
 }
+
+
+
 
 
