@@ -24,11 +24,12 @@ Plot3 <- ggplot(Fish_Length, aes(x = Length)) +
          ggtitle(" Frequency histogram of Fish Length ") +
          xlab(" Fish Length in Cm")+ ylab(" Count ")
 Plot3
-#Density Histogram of Fish Length
 
+#Creating X,Y to get the Normal Curve of Fish Length
 X <- seq(14, 90, length.out=1000)
 Y <- with(Fish_Length, dnorm(X, mean(Length), sd(Length)))
 lines(X, Y, col = "red")
+#Density Histogram of Fish Length
 Plot4 <- ggplot(Fish_Length, aes(x = Length, y = ..density.. )) +
          geom_histogram(binwidth = (5), colour = " black ", fill = " steelblue ") +
          geom_line(data = Fish_Length, aes(x = X, y = Y), color = "white") +
