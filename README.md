@@ -5,8 +5,7 @@
 + Bryant, StatsThoughts
 + Charlotte, cjlcasey
 + Yulia, YuliaYashneva
-+ Name 3, ID3
-+ Name 4, ID4
++ Abhinav
 
 ## Task 1: Data exploration
 
@@ -57,4 +56,4 @@
 
 - In one sentence per team member, describe who did what (e.g., A wrote function x, tested function y, documented function z).
 
-
+Charlotte: Wrote original functions for the Initialisation functions (before further optimisation and consistency edits), put together plots for Data Exploration stage and wrote and tested the Testing function from Task 4.
