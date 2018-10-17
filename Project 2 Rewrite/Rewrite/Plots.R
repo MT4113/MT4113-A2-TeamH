@@ -9,7 +9,7 @@ library(ggplot2)
 Plot1 <- ggplot(data = Fish_Length, aes(x = Age, y = Length)) +
          geom_bar(stat= "identity", fill = " steelblue ") +
          xlab(" Age ") + ylab(" Fish Length in Cm ")+ 
-         theme_minimal() + ggtitle(" Scatterplot between Fish Length and Age")
+         theme_minimal() + ggtitle(" Barplot between Fish Length and Age")
 Plot1
 #Scatterplot between Fish Length and Age
 Plot2 <- ggplot(Fish_Length, aes(Age, Length))+
@@ -25,10 +25,12 @@ Plot2 <- ggplot(Fish_Length, aes(x = Length)) +
          xlab(" Fish Length in Cm")+ ylab(" Count ")
 Plot2
 #Density Histogram of Fish Length          
-Plot <- ggplot(Fish_Length, aes(x = Length)) +
-        geom_histogram(binwidth = 3) +
-        ggtitle(" Frequency histogram of Fish Length ") +
-        xlab(" Fish Length in Cm")+ ylab(" Count ")
+Plot3 <- ggplot(Fish_Length, aes(x = Length)) +
+         geom_histogram(binwidth = (5), colour = "black", fill = "white")
+         ggtitle(" Frequency histogram of Fish Length ") +
+         xlab(" Fish Length in Cm")+ ylab(" Count ")+ theme_dark()
+        
+Plot3        
         
       
                  
