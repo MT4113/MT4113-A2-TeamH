@@ -63,9 +63,10 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   data$Age[is.na(data$Age)] <- -1
   
   if(roundAge){data$age <- round(data$Age)} #Rounds ages if it should be rounded
+  data$Age <- as.factor(data$Age) #preprocessing, grouping ages as a factor 
   
-  data$Age <- as.factor(data$Age)
-  
+  data <- data.frame(Length = data$Length, Age = data$Age) #Removes any uneeded columns for memory issues
+
   #Seperate known and unknown data
   unknown_dat <- data[data$Age == -1,] #this can be moved up and optimized earlier since it can be used
   known_dat <- data[data$Age != -1,]
@@ -83,7 +84,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   if(length(k_mat$sigma[is.na(k_mat$sigma)]) > 0){stop("Insufficent known ages for initialization")}
   
   unknown_dat_case <- unknown_dat
-  if(inc_known_as_unknown_init){unknown_dat_case <- rbind(unknown_dat_case, known_dat)}
+  if(inc_known_as_unknown_init){unknown_dat_case <- rbind(known_dat, unknown_dat_case)}
   
   #input - dataframe data
   #output - lamda values 
@@ -108,7 +109,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
     #problem from too few samples and ranges of data that are too large 
     stop("Likelihood estimates cannot be determined")}
   
-  if(inc_known_as_unknown_iter){unknown_dat <- rbind(unknown_dat,known_dat)}
+  if(inc_known_as_unknown_iter){unknown_dat <- rbind(known_dat, unknown_dat)}
 
   while((abs(ll_vec[maxit]-ll_vec[maxit-1]) > epsilon) & maxit <= maxit_Total){
     # Reassign exit conditions 
@@ -131,11 +132,19 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
 
   }  
   
-  
   converged <- ifelse(abs(ll_vec[maxit]-ll_vec[maxit-1]) > epsilon, FALSE, TRUE)
   
   # Formatting the outptu of the posterior
   prob_out <- prob_table[,c(-1,-2), drop = F]
+  
+  #Case where knowns are not used in the iteration step,
+  if(inc_known_as_unknown_iter == FALSE){
+    #Gets the posteriors for all KNOWN values (permitation of 1,0,0,...,0)
+    known_post_prob <- sapply(uniq_ages, add_binary_cols, dat = known_dat$Age)
+    known_lengths <- data.frame(known_post_prob)
+    prob_out <- rbind(known_lengths, prob_out)
+  }
+
   colnames(prob_out) <- uniq_ages
   rownames(prob_out) <- c() #Gets rid of row names, so not 100% sure if needed, but may be useful
   
@@ -143,7 +152,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   output <- list(estimates = k_mat, 
                  inits = k_mat_init, 
                  converged = converged,
-                 posterior = prob_out, #This table needs to be cleaned
+                 posterior = (prob_out), #To be fixed
                  likelihood = ll_vec[c(3:maxit)]) 
   return(output)
 }
