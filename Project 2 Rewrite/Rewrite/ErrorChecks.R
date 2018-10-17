@@ -8,7 +8,15 @@ df_check <- function(df){
     if(is.numeric(df$Age) & is.numeric(df$Length)){ #values are numeric
      if(length(df$Length[is.na(df$Length)]) == 0){ #No nulls in Length 
       if(length(unique(df$Age)) >= 1 & (length(df$Age[is.na(df$Age)]) > 0) ){#Must be at least one Unique age
-        flag = TRUE
+        
+        tmp_ages <- unique(df$Age)
+        
+        #No non-negative values 
+        if(length(tmp_ages) == length(tmp_ages[tmp_ages >= 0])){
+          
+          flag = TRUE
+        }
+
       } 
      }
     }
