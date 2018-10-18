@@ -13,6 +13,8 @@
 
 The scatter plot of Fish Length and Age displays a positive linear increase in length as age increases. This trend is displayed with the white line in the plot above. The overall mean of fish lengths is 46.68717cm and the mean for known fish aged 1, 2, and 3, are 21.44cm, 42.11478cm and 67.01676cm respectively. 
 
+
+
 | Age       | Mean      | Std.Dv     | Min    | Q25    | Median | Q75     | Max   |
 |-----------|-----------|------------|--------|--------|--------|---------|-------|
 | Age 1     | 21.44     | 3.794898   | 14.35  | 19.430 | 21.42  | 23.4725 | 30.97 |
@@ -21,13 +23,19 @@ The scatter plot of Fish Length and Age displays a positive linear increase in l
 
 The table above illustrates the mean, standard deviation, median, min, max, and 25% and 75% quantiles of fish lengths for fish of known age.  Note that the standard deviations increase as the age which suggests a non-uniform standard deviation (potentially a linear model if trying to fit a model of a single distribution)
 
+
+
 ![Fig2](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Final%20Boxplot.png)
 
 The figure above is a visualization of the previous chart, and shows that for the fish of known ages, there are distinct groupings of length for each age category.   
 
+
+
 ![Fig3](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Plain%20Histo.png)
 
 The histogram above contains an undefined Tri-Modal Shape, which suggests that a single distribution may not be the best choice for the model. We should can consider testing a Gaussian mixture distribution for three catagories.  
+
+
 
 ![Fig4](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Density%20Histo.png)
 
