@@ -100,7 +100,6 @@ $classResult
 In this test trial it becomes more evident with the inclusion of the probability density function described by the original parameters that then determined the Lengths generated. Comparing the shape that comes from the initial estimates to that of the real shape and how close the final estimate approach the real probability density function.
 
 ## Task 5: Results reporting
-
 | Parameter | mu | sigma | lambda |
 |-----------|----|-------|--------|
 | Age 1     | 23.39995  | 3.897076     | 0.2054526      |
@@ -108,6 +107,8 @@ In this test trial it becomes more evident with the inclusion of the probability
 | Age 3     | 67.06457  | 8.153021     | 0.3413516      |
  
 - Plot the original data with the densities of the mixture components superimposed.  Include your figure in the README file.
+
+![Link to the code for where all the plots shown in the README.md file was generated](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Task1%20plots.R)
 
 ## Task 6: Work attribution
 
