@@ -66,6 +66,12 @@ gen.test.data <- function(continuous = FALSE){
 
 #---------------Function for testing the Algorith Implementation----------------
 
+# Further additions to come here, going to quantify behaviour differently, can 
+# simuulated sets from above against their real parameters, if there is existence 
+# of the real data "behaviour" segment will be in comparison to that.
+# If there isn't any real data, as in the case of the original dataset, will only
+# compare to initial.
+
 imp.test.em <- function(A){
   # Aiming to show for each input data frame, "A", that the outputs given by the 
   # teamEM function are as would be expected for the data frame.
