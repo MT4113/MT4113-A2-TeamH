@@ -1,6 +1,4 @@
 
-
-
 df_check <- function(df){
   # The purpose of this function is to trap and erroneous inputs where a 
   # dataframe input is required.
