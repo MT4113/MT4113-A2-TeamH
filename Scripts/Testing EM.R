@@ -278,5 +278,39 @@ test_functions <- function(){
 }
 #test_functions()
 
+# q <- gen.test.data()
+# test_functions(q$simData)
+working_test <- function(){
+  # This function tests our function against the actual expectation maximization
+  # algorithmic function in mixtools using a randomly generated dataset
+  # generated in the function. Comparison is done through print output
+  #
+  # Output:
+  # The table of mu, sigma and lambda and the log likelihood for both our
+  # function and mixtools
+  
+  library(mixtools)
+  source("Scripts/teamEM.R", local = TRUE)
+  q <- gen.test.data()
+  # gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ),
+  # sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7),
+  # continuous = FALSE)
+  
+  print("Data generated...")
+  
+  mine <- teamEM(q$simData, inc_known_as_unknown_iter = T)
+  print("teamEM results generated...")
+  
+  actual <- normalmixEM(q$simData$Length, mu = q$k_table$mu, sigma = q$k_table$sigma, lambda = q$k_table$lambda,
+                        epsilon = 1e-08, maxit = 1000)
+  print("actual results generated...")
+  
+  actual_k <- data.frame(actual$mu,actual$sigma, actual$lambda )
+  print(mine$estimates)
+  print(actual_k)
+  print(mine$likelihood[length(mine$likelihood)])
+  print(actual$loglik)
+}
+working_test()
 
 
