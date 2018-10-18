@@ -50,29 +50,22 @@ For this algorithm convergence is reached when the difference between log-likeli
 
 **Demonstrating that implementing the EM algorithm with similar data sets** 
 For comparison, first it will be demonstrated with the original data set "x". This gives the output:
-
-           check
-estimates      1
-inits          1
-posterior      1
-likelihood     1
-converged      1
 $classResult
 [1] "All outputs in form expected."
 
 $classCheck
-           check
-estimates      1
-inits          1
-posterior      1
-likelihood     1
-converged      1
+|           |check|
+|-----------|-----|
+|estimates  |  1  |
+|inits      |  1  |
+|posterior  |  1  |
+|likelihood |  1  |
+|converged  |  1  |
 
 $behaviourCheck
-[1] "Small variation between initial estimated distribtion and final estimated distribution."
-
-$differencePercentage
-[1] "0.000937071085774119" "%"  
+|                    |percentage_difference|
+|--------------------|---------------------|
+|initial to final (%)|     0.0005939173    |
 
 ![Fig6](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/OriginalRplot.png)
 
