@@ -311,6 +311,6 @@ working_test <- function(){
   print(mine$likelihood[length(mine$likelihood)])
   print(actual$loglik)
 }
-working_test()
+#working_test()
 
 
