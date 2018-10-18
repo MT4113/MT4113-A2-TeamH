@@ -19,17 +19,17 @@ gen.test.data <- function(continuous = FALSE){
   #       The second item on the list is a vector of Fish Lengths to be used to 
   #        create a data frame that can be put through the teamEM function for testing.
  
-  mu <- runif(3, 1, 100)
-  sigma <- runif(3, 1, 10)
+  mu <- runif(3, 5, 100)
+  sigma <- runif(3, 2, 10)
   lambda <- rep(0, 3)
-  lambda[1] <- runif(1, .1, .5)
-  lambda[2] <- runif(1, .1, .5)
+  lambda[1] <- runif(1, .1, .4)
+  lambda[2] <- runif(1, .1, .4)
   lambda[3] <- 1- (lambda[1]+lambda[2])
   n <- 1000
   
-  X1 <- lambda[1]*rnorm(ceiling(n/3), mu[1], sigma[1])
-  X2 <- lambda[2]*rnorm(ceiling(n/3)-1, mu[2], sigma[2])
-  X3 <- lambda[3]*rnorm(ceiling(n/3)-1, mu[3], sigma[3])
+  X1 <- rnorm(ceiling(n/3), mu[1], sigma[1])
+  X2 <- rnorm(ceiling(n/3)-1, mu[2], sigma[2])
+  X3 <- rnorm(ceiling(n/3)-1, mu[3], sigma[3])
   
   sim.fish.lengths <- c(X1, X2, X3)
   
