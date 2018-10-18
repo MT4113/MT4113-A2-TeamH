@@ -31,7 +31,11 @@
 
 ![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/EM-Algorithm_1-2.png)
 
-The first part of the EM algorithm is initialization. Firstly, function (1) is created for finding the mean, standard deviation and lambda for each age class based on the observations from the dataset with known ages. Its output is used as the input in function (2) to generate initial probability estimates for elements with unknown age class and updating the mean, standard deviation and lambda based on those results. Then the iterative process is started. Using those updated estimates posterior probabilities for each observation and age class are calculated (function 3). Function (4) generates new estimates for mean, standard deviation and lambda at each iterative step. In order to determine convergence of the maximization algorithm function (5) calculates log-likelihoods based on the estimated values from the function (4) and function (3). This iterative process from function (3) to function (5) continues until convergence or the maximum number of iterations is reached. For this algorithm convergence is reached when the difference between log-likelihoods generated in two consecutive iterative steps is less than epsilon. Following that, the output of the EM algorithm is formatted and returned as the following: a data frame of estimates (function 4 output), a data frame of initial values (function 2 output), convergence of the values (TRUE/FALSE), a data frame of posterior probabilities (function 3) and a vector of log-likelihood values which were generated at each iterative step (function 5).
+The first part of the EM algorithm is initialization. Firstly, function (1) is created for finding the mean, standard deviation and lambda for each age class based on the observations from the dataset with known ages. Its output is used as the input in function (2) to generate initial probability estimates for elements with unknown age class and updating the mean, standard deviation and lambda based on those results. 
+
+Then the iterative process is started. Using those updated estimates posterior probabilities for each observation and age class are calculated (function 3). Function (4) generates new estimates for mean, standard deviation and lambda at each iterative step. In order to determine convergence of the maximization algorithm function (5) calculates log-likelihoods based on the estimated values from the function (4) and function (3). This iterative process from function (3) to function (5) continues until convergence or the maximum number of iterations is reached. 
+
+For this algorithm convergence is reached when the difference between log-likelihoods generated in two consecutive iterative steps is less than epsilon. Following that, the output of the EM algorithm is formatted and returned as the following: a data frame of estimates (function 4 output), a data frame of initial values (function 2 output), convergence of the values (TRUE/FALSE), a data frame of posterior probabilities (function 3) and a vector of log-likelihood values which were generated at each iterative step (function 5).
 
 ## Task 3: Algorithm implementation
 
@@ -42,10 +46,36 @@ The first part of the EM algorithm is initialization. Firstly, function (1) is c
 - [Maybe you also have subroutine functions to e.g., calculate the likelihood](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Scripts/calcLikelihood.R)
 
 ## Task 4: Function testing
+- [Link to script for the Testing of the EM algorithm, including the function that generates simulated data sets](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Testing%20EM.R)
 
-- Write a function to create simulated datasets with similar properties to the "true" data.  Include a link to this function in the README file.
+**Demonstrating that implementing the EM algorithm with similar data sets** 
+For comparison, first it will be demonstrated with the original data set "x". This gives the output:
 
-- Show that the algorithm returns correct values for simulated datasets.  How you do this is up to your team.
+           check
+estimates      1
+inits          1
+posterior      1
+likelihood     1
+converged      1
+$classResult
+[1] "All outputs in form expected."
+
+$classCheck
+           check
+estimates      1
+inits          1
+posterior      1
+likelihood     1
+converged      1
+
+$behaviourCheck
+[1] "Small variation between initial estimated distribtion and final estimated distribution."
+
+$differencePercentage
+[1] "0.000937071085774119" "%"  
+
+![Fig6](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/OriginalRplot.png)
+
 
 ## Task 5: Results reporting
 
