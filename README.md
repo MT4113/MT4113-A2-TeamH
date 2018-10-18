@@ -28,7 +28,9 @@
 - Include a diagram of your team's approach to the problem.  This can be digital or hand-drawn and scanned in as a PDF. Again, include your diagram in the README file:
 
 ![Diagram](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Figures/Diagram.png)
-![Diagram1](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/EM-Algorithm-2.pdf)
+
+![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/EM-Algorithm-2.pdf)
+
 ## Task 3: Algorithm implementation
 
 - Create modular code consisting of a set of documented and tested functions implementing this algorithm. Include links to these functions in the README file:
@@ -59,6 +61,6 @@
 
 - In one sentence per team member, describe who did what (e.g., A wrote function x, tested function y, documented function z).
 
-Charlotte: Wrote original functions for the Initialisation functions (before further optimisation and consistency edits), put together plots for Data Exploration stage and wrote and tested the Testing function from Task 4.
+Charlotte: Wrote original functions for the Initialisation functions (before further optimisation and consistency edits), put together plots for Data Exploration stage and wrote and tested the function for generating similar data sets (gen.test.data) and the function to implement testing of the EM algorithm and compare with expected results (imp.test.em), using both the original data and similar dadta sets.
 
 Bryant: General project oversight, optimized code, reviewed code figures and reports, coded the itertative portion of the EM algorithim, documented and commented existing code, tested teamEM.R and functions.R for correct inputs/outputs, and offered coding aid to team members on small misc tasks. 
