@@ -75,7 +75,7 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
   return(list(k_table = k_table, simData = sim.data.frame))
 }
 
-gen.test.data()
+#gen.test.data()
 
 
 #---------------Function for testing the Algorith Implementation----------------
