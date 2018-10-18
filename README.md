@@ -135,6 +135,7 @@ In Testing EM.R, the function working_test() tests a randomly generated valid da
 The above table of parameters was generated using the default results for our teamEM() function. Different results will arise depending on the values of inc_known_as_unknown_iter and inc_known_iter in the maximization algorithim. Parameter estimates indicate that the variance in fish lengths increases as the age increases
  
 ![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Functions%20Histo.png)
+
 Plot of the original data with the densities of the mixture components superimposed. The distribution of Fish length appears to fit a trimodal gaussian mixture distribution. 
 
 [Link to the code for where all the plots shown in the README.md file was generated](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Task1%20plots.R)
