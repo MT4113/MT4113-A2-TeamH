@@ -53,8 +53,7 @@ For comparison, first it will be demonstrated with the original data set "x". Th
 $classResult
 [1] "All outputs in form expected."
 
-$classCheck
-|           |check|
+|Class Check|check|
 |-----------|-----|
 |estimates  |  1  |
 |inits      |  1  |
@@ -62,8 +61,8 @@ $classCheck
 |likelihood |  1  |
 |converged  |  1  |
 
-$behaviourCheck
-|                    |percentage_difference|
+
+|Behaviour Check     |percentage_difference|
 |--------------------|---------------------|
 |initial to final (%)|     0.0005939173    |
 
