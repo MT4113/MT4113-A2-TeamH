@@ -6,13 +6,14 @@ load("FishLengths.RData")
 Fish_Length <- x
 
 #Scatterplot between Fish Length and Age
-Plot1 <- ggplot(Fish_Length, aes(Age, Length)) +
-         geom_point(aes(colour = factor(Age))) +
+Plot1 <- ggplot(Fish_Length, aes(x = Age,y = Length)) +
+         geom_point(aes(colour = Age), size = 5) +
          xlab(" Age Category " ) + ylab(" Fish Length in Cm ") +
-         theme_dark() + ggtitle(" Scatterplot between Fish Length and Age ")+
+         theme_dark() + ggtitle(" Scatterplot between Fish Length and Age ") +
          stat_summary(fun.y="mean",
-                      colour = "white", geom = "line",group = 1)
-  
+                      colour = "white", geom = "line",group = 1) +
+  scale_fill_discrete(name = "Age Category", breaks=c("1","2","3"))
+
 Plot1
 
 #Box-Plot between Fish Length and Age
@@ -21,10 +22,10 @@ Fish_Length$Age <- as.factor(Fish_Length$Age)
          
 Plot2 <- ggplot(data = Fish_Length[!is.na(Fish_Length$Age),]) + 
           geom_boxplot(aes(Age, Length, fill = "Age"))+
-          scale_x_discrete(name = " Age ") +
+          scale_x_discrete(name = " Age ") + theme_dark()+
           scale_y_continuous(name = "Fish Length in Cm")+
-          ggtitle("Boxplot of Fish length and Age")
-
+          ggtitle("Boxplot of Fish length and Age")+
+          theme(legend.position = "None")
 Plot2
 
 #Histogram of Fish Length and it's count 
@@ -63,7 +64,7 @@ results <- teamEM(x)
 ests <- results$estimates 
 
 Plot5 <- ggplot(Fish_Length, aes(x = Length)) + 
-         geom_histogram(aes(y = ..density..), binwidth = (5), colour = "black", 
+         geom_histogram(aes(y = ..density..), binwidth = (3), colour = "black", 
                        fill = " steelblue ") +
         stat_function(fun = pdf, args = list(k_tab = ests), color = "white")+ 
         ggtitle(" Density histogram of Fish Length ") +
