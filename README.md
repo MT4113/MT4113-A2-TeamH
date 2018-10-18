@@ -12,9 +12,12 @@
 - Create two plots of the data: one with age on the x-axis and length on the y-axis, and one with length on the x-axis and frequency on the y-axis.  Add axis labels and any additional information you think is relevant (e.g., average length-at-age). Include your figure in your README file like this: 
 
 ![Fig2](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/assignment2Rplot.png)
-The Scatter plot between Fish Length and Age gives us a simplistic view on how the length of the fish varies with Age.
-We can see the obvious exponential increase in length from year 1 to year 2, with the highest lengths of year 1 and year 2 being 31cm and 59.8 cm respectively.
-The mean length of fish from years 1-3 is 21.4cm, 42.1cm and 46.7cm respectively. 
+
+•	The Scatter plot between Fish Length and Age displays the exponential increase in length from year 1 to year 2, with the highest lengths of year 1 and year 2 being 31cm and 59.8 cm respectively. The mean length of fish from years 1-3 is 21.4cm, 42.1cm and 67.7cm respectively.  
+•	The mean fish length was found to be 46.68717 cm.
+•	From the Summary Stats table we can observe the increase in Sd, suggesting increase in variation for the length of fishes from ages 1-3 years. 
+•	The Fish length data as predicted does not follow Normal distribution and has an Undefined Bi-Modal Shape.
+
 - Comment on the data and plots.  Describe the properties of the data (max 250 words).
 
 
