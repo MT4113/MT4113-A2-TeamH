@@ -102,7 +102,7 @@ imp.test.em <- function(A){
   #                                       each curve as a percentage of closed 
   #                                       integral of the initial estiamted pdf.
   
-  source("teamEM.R", local = TRUE)
+  source("Scripts/teamEM.R", local = TRUE)
 
   result <- teamEM(A)
   
@@ -163,7 +163,7 @@ imp.test.em <- function(A){
 test_ErrorChecks <- function(x){
   #Funciton to iterate some of the testing for booleans and numeric values
   
-  source("ErrorChecks.R", local = TRUE)
+  source("Scripts/ErrorChecks.R", local = TRUE)
   bool <- boolean_check(x)
   numbPos <- numeric_Check(x, int_flag = F, pos_flag = T)
   numbInt <- numeric_Check(x, int_flag = T, pos_flag = F)
@@ -189,7 +189,7 @@ testing_ErrorChecks <- function(){
   # [1] FALSE
   # [1] FALSE
   
-  source("ErrorChecks.R", local = TRUE)
+  source("Scripts/ErrorChecks.R", local = TRUE)
   
   tmp <- c(1,-1,1.1,-1.1)
   for (i in tmp){
@@ -236,7 +236,7 @@ test_functions <- function(){
   # Tests to ensure the inputs and outputs are of the correct form 
   # Outputs: Various tables for visual inspection of data 
   
-  source("functions.R", local = TRUE)
+  source("Scripts/functions.R", local = TRUE)
   #This is to be replaced by a generated dataframe 
   load("FishLengths.RData")
   x$Age[is.na(x$Age)] <- -1

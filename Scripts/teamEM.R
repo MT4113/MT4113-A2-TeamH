@@ -93,11 +93,11 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
     
   
   # Source all the functions located in functions.R
-  source("functions.R", local = TRUE)
+  source("Scripts/functions.R", local = TRUE)
  
   # Error Checking ----------------------------------------------------------
   # Source all the functions located in ErrorChecks.R
-  source("ErrorChecks.R", local = TRUE)
+  source("Scripts/ErrorChecks.R", local = TRUE)
   
   # Dataframe Check (ensures inputs are valid)
   if(!df_check(data)){stop("Invalid dataset for data")}
