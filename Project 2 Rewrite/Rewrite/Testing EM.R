@@ -147,7 +147,123 @@ imp.test.em <- function(A){
   return(conclusion)
 }
 
+test_ErrorChecks <- function(x){
+  #Funciton to iterate some of the testing for booleans and numeric values
+  
+  source("ErrorChecks.R", local = TRUE)
+  bool <- boolean_check(x)
+  numbPos <- numeric_Check(x, int_flag = F, pos_flag = T)
+  numbInt <- numeric_Check(x, int_flag = T, pos_flag = F)
+  return(c(bool, numbPos, numbInt))
+}
+testing_ErrorChecks <- function(){
+  # Testing to ensure error checks are handled properly
+  # Should output:
+  # [1] FALSE  TRUE  TRUE
+  # [1] FALSE FALSE  TRUE
+  # [1] FALSE  TRUE FALSE
+  # [1] FALSE FALSE FALSE
+  # [1]  TRUE FALSE FALSE
+  # [1]  TRUE FALSE FALSE
+  # [1] TRUE
+  # [1] TRUE
+  # [1] FALSE
+  # [1] FALSE
+  # [1] FALSE
+  # [1] FALSE
+  # [1] FALSE
+  # [1] FALSE
+  # [1] FALSE
+  # [1] FALSE
+  
+  source("ErrorChecks.R", local = TRUE)
+  
+  tmp <- c(1,-1,1.1,-1.1)
+  for (i in tmp){
+    print(test_ErrorChecks(i))
+  }
+  tmp <- c(T, F)
+  for (i in tmp){
+    print(test_ErrorChecks(i))
+  }
+  
+  df <- data.frame(Age = c(1,2,1,2,1,NA), Length = c(1,2,3,1,2,1))
+  print(df_check(df)) #True
+  
+  df <- data.frame(Age = c(1,22,1,22,1,NA), Length = c(1,2,3,1,2,1))
+  print(df_check(df)) #True
+  
+  df <- data.frame(Age = c(1,22,1,22,1,22), Length = c(1,2,3,1,2,1))
+  print(df_check(df)) #False
+  
+  df <- data.frame(Age = c(1,22,1,22,1,NA), Length = c(NA,2,3,1,2,1))
+  print(df_check(df)) #False
+  
+  df <- data.frame(Bacon = c(1,22,1,22,1,NA), Length = c(1,2,3,1,2,1))
+  print(df_check(df)) #False
+  
+  df <- data.frame(Age = c(1,22,1,22,1,NA), Strips = c(1,2,3,1,2,1))
+  print(df_check(df)) #False
+  
+  df <- data.frame(Age = c("1","22","1","22","1","22"), Length=c(1,2,3,1,2,1))
+  print(df_check(df)) #False
+  
+  df <- data.frame(Age = c(1,22,1,22,1,NA), Length = c(1,2,3,"1",2,1))
+  print(df_check(df)) #False
+  
+  df <- data.frame(Age = c(-1, -1, -1, -1, -1, NA), Length = c(1,2,3,1,2,1))
+  print(df_check(df)) #False
+  
+  df <- data.frame(Age = as.factor(c(1,22,1,22,1,NA)), Length = c(1,2,3,1,2,1))
+  print(df_check(df)) #False
+}
+#testing_ErrorChecks()
 
+test_functions <- function(){
+  # Tests to ensure the inputs and outputs are of the correct form 
+  # Outputs: Various tables for visual inspection of data 
+  
+  source("functions.R", local = TRUE)
+  #This is to be replaced by a generated dataframe 
+  load("FishLengths.RData")
+  x$Age[is.na(x$Age)] <- -1
+  x$FishID <- NULL
+  
+  ages <- c(1,2,3)
+  
+  # Prints length(ages)x3 matrix of estimates
+  # values in matrix should be slightly different due to different arguments 
+  # for each function
+  
+  # Prints inital estimates
+  k_tab <- init_data_ests(x,ages)
+  print(k_tab) 
+  
+  # Prints estimates for both inc_known_init cases. Should be different from
+  # each other but not too signifigant
+  print(init_prob_ests(k_tab, length(ages), T, x[x$Age == -1, ], 
+                       x[x$Age != -1, ], ages))
+  print(init_prob_ests(k_tab, length(ages), F, x[x$Age == -1, ], 
+                       x[x$Age != -1, ], ages))
+  
+  # Contains two Columns of data one is Length and len(age) cols of probabilites
+  # There are apply errors when only one column is specified.
+  # First case is known ages, 2nd case is all ages, 3rd is all unknown ages
+  print(head(prob_ests(x[x$Age != -1, ], k_tab, length(ages))))
+  print(head(prob_ests(x, k_tab, length(ages))))
+  prob_tab_test <- prob_ests(x[x$Age == -1, ], k_tab, length(ages))
+  print(head(prob_tab_test))
+  
+  # Prints length(ages)x3 matrix of estimates
+  # values in matrix should be slightly different due to different arguments 
+  # for each function
+  print(max_ests(prob_tab_test, k_tab, length(ages), F, x[x$Age != -1, ]))
+  print(max_ests(prob_tab_test, k_tab, length(ages), T, x[x$Age != -1, ]))
+  
+  # Prints a likelihood, should be negatively values 
+  print(likelihood(x[x$Age != -1, ], k_tab, length(ages)))
+}
+#test_functions()
 
 
 
