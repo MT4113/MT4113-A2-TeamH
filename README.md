@@ -49,7 +49,7 @@ For this algorithm convergence is reached when the difference between log-likeli
 - [Link to script for the Testing of the EM algorithm, including the function that generates simulated data sets](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Testing%20EM.R)
 
 **Demonstrating that implementing the EM algorithm with similar data sets** 
-For comparison, first it will be demonstrated with the original data set "x". This gives the output:
+For comparison, first it will be demonstrated with the original data set "x". The function imp.test.em(x) gives the output:
 $classResult
 [1] "All outputs in form expected."
 
@@ -61,12 +61,20 @@ $classResult
 |likelihood |  1  |
 |converged  |  1  |
 
+The $classCheck section shown above checks the class of each of the parts of the output of the teamEM function and returns a 1 if all is correct. If the sum of the column is 5, so all results are in the correct form, and then prints out the statement under $classResult. 
 
 |Behaviour Check     |percentage_difference|
 |--------------------|---------------------|
 |initial to final (%)|     0.0005939173    |
 
+The percentage difference shown above is the measure of how the distribution has changed over the course of the EM Algorithm. It is calculated by the integral between the two curves over the integral of the initial over the discrete interval the fish lengths cover.
+
 ![Fig6](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/OriginalRplot.png)
+
+As you can see from the chart above the two probability density functions don't differ to greatly.
+
+Now for testing a simulated data frame made out of similar data sets from the gen.test.data(), this time looking at the output of imp.test.em(gen.test.data(), test = TRUE).
+
 
 
 ## Task 5: Results reporting
