@@ -28,8 +28,7 @@ df_check <- function(df){
           # Tests for negative values in ages
           tmp_ages <- unique(df$Age)
           if(length(tmp_ages) == length(tmp_ages[tmp_ages >= 0])){
-            print("here")
-          flag = TRUE
+            flag = TRUE
         }
       } 
      }
