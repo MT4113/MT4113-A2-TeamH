@@ -51,20 +51,32 @@ Plot4
 #Density histogram of mixture components superimposed     
 #Using the teamEM fucntion results to plot 
 source("teamEM.R", local = TRUE)
-results <- teamEM(x)
+
+pdf <- function(x, k_tab){
+  rowSums(mapply(function(mu,sigma,lambda,x){return(lambda*dnorm(x,mu,sigma))},
+                 k_tab$mu, k_tab$sigma, k_tab$lambda, MoreArgs = list(x = x)))
+  
+}
+#For some reason Fish_Length is assigned to be a factor when we require it
+#to be numeric, so we use x instead of Fish_Length
+results <- teamEM(x) 
 ests <- results$estimates 
 
 Plot5 <- ggplot(Fish_Length, aes(x = Length)) + 
+<<<<<<< HEAD
          geom_histogram(aes(y = ..density..),
          breaks = seq(15, 90, by=5), colour = "black",fill = " steelblue ") +
          stat_function(fun = pdf, args = list(k_tab = ests), color = "white")+ 
          ggtitle(" Density histogram of Fish Length ") +
          xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark()
+=======
+         geom_histogram(aes(y = ..density..), binwidth = (5), colour = "black", 
+                       fill = " steelblue ") +
+        stat_function(fun = pdf, args = list(k_tab = ests), color = "red")+ 
+        ggtitle(" Density histogram of Fish Length ") +
+        xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark()
+
+>>>>>>> 7ccc52209b01196c5d838cb8713808f6bc391742
 Plot5
 
 
-pdf <- function(x, k_tab){
-   rowSums(mapply(function(mu,sigma,lambda,x){return(lambda*dnorm(x,mu,sigma))},
-                  k_tab$mu, k_tab$sigma, k_tab$lambda, MoreArgs = list(x = x)))
-  
-}
