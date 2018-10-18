@@ -11,7 +11,7 @@
 
 ![Fig1](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Scatterplot.png)
 
-The scatter plot of Fish Length and Age displays a positive linear increase in length as age increases. This trend is displayed with the white line in the plot above. The overall mean of fish lengths is 46.68717cm and the mean for known fish aged 1, 2, and 3, are 21.44cm, 42.11478cm and 67.01676cm respectively. 
+The scatter plot of Fish Length and Age displays a positive linear increase in length as age increases. This trend is displayed with the white line in the plot above. 
 
 
 
