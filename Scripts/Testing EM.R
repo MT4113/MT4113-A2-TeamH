@@ -25,7 +25,8 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
   #       can be used in imp.test.em to verify the final estimates that are 
   #       given by the EM algo. The second item on the list is a vector of Fish  
   #       Lengths that has been used to create the third item, the data frame, 
-  #       "sim.data.frame", that can be put through the teamEM function for testing.
+  #       "sim.data.frame", that can be put through the teamEM function for 
+  #       testing.
   
   #Calculate lambda
   lambda <- known/sum(known)
@@ -80,10 +81,10 @@ gen.test.data()
 #---------------Function for testing the Algorith Implementation----------------
 
 # Further additions to come here, going to quantify behaviour differently, can 
-# simuulated sets from above against their real parameters, if there is existence 
-# of the real data "behaviour" segment will be in comparison to that.
-# If there isn't any real data, as in the case of the original dataset, will only
-# compare to initial.
+# simuulated sets from above against their real parameters, if there is  
+# existence of the real data "behaviour" segment will be in comparison to that.
+# If there isn't any real data, as in the case of the original dataset, will 
+# only compare to initial.
 
 imp.test.em <- function(A){
   # Aiming to show for each input data frame, "A", that the outputs given by the 
@@ -292,6 +293,8 @@ working_test <- function(){
   library(mixtools)
   source("Scripts/teamEM.R", local = TRUE)
   q <- gen.test.data()
+  
+  # # A case where the paramaters are different 
   # gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ),
   # sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7),
   # continuous = FALSE)
@@ -301,7 +304,8 @@ working_test <- function(){
   mine <- teamEM(q$simData, inc_known_as_unknown_iter = T)
   print("teamEM results generated...")
   
-  actual <- normalmixEM(q$simData$Length, mu = q$k_table$mu, sigma = q$k_table$sigma, lambda = q$k_table$lambda,
+  actual <- normalmixEM(q$simData$Length, mu = q$k_table$mu, 
+                        sigma = q$k_table$sigma, lambda = q$k_table$lambda,
                         epsilon = 1e-08, maxit = 1000)
   print("actual results generated...")
   
