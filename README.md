@@ -41,7 +41,7 @@ For this algorithm convergence is reached when the difference between log-likeli
 
 - Create modular code consisting of a set of documented and tested functions implementing this algorithm. Include links to these functions in the README file:
 
-- [Code for implementing the EM algorithm](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Scripts/teamEM.R)
+- [Code for implementing the EM algorithm](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/teamEM.R)
 
 - [Maybe you also have subroutine functions to e.g., calculate the likelihood](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Scripts/calcLikelihood.R)
 
