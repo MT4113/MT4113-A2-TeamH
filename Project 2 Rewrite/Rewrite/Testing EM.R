@@ -80,27 +80,31 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
 #---------------Function for testing the Algorith Implementation----------------
 
 imp.test.em <- function(A, test = FALSE){
-  # Aiming to show for each input data frame, "A", that the outputs given by the 
-  # teamEM function are as would be expected for the data frame. In the case of 
-  # test = TRUE, simulated data frame from the gen.test.data function, enter as A,  
-  # and the relevant data will be selected.
+  # The aim of this function is to show for each input data frame, "A", that the 
+  # outputs given by the teamEM function are as would be expected for the data 
+  # frame. In the case of test = TRUE, simulated data frame from the 
+  # gen.test.data function, enter as A, and the relevant data will be selected.
+  # 
   # Input:
   #       "A": the data frame, or gen.test.data() output, that you want to trial.
   # Outputs:
   #       "conclusion": a list that displays the results of the tests on 
   #                     features of the output of teamEM(A).
-  #                     "classResult": confirming values belong to expected class.
-  #                                   If 1 then that segment of teamEM returned
-  #                                   in the class expected.
-  #                     "classCheck":
-  #                     "behaviourCheck": comment on variation between initial 
-  #                                       estimates and final estimates
-  #       Output also includes a plot. For the test = TRUE case this will display 
-  #       pdfs on a graph, the real pdf generated as part of gen.test.data() function, 
-  #       the pdf value given by the initial parameter estimates and the pdf given by 
-  #       final parameter estimates. For the test = FALSE case, then there are two
-  #       pdf plots, the pdf from the initial parameter estimates and another from
-  #       the final parameter estimates.
+  #       "classResult": confirming values belong to expected class. If 1 then 
+  #                     that segment of teamEM returned in the class expected.
+  #       "classCheck": break down of checkResult, indicating which subset 
+  #                     returns 1 (True) and which 0 (False).
+  #       "behaviourCheck": table giving the values of the percentage 
+  #                     (or relative) difference in the pdfs displayed. This  
+  #                     should be used as a guide to how close the final 
+  #                     estimates are to the true pdf and how far they converged
+  #                     under the EM algorithm. 
+  # Output also includes a plot. For the test = TRUE case this will display pdfs 
+  # on a graph, the real pdf generated as part of gen.test.data function, the 
+  # pdf value given by the initial parameter estimates and the pdf given by 
+  # final parameter estimates. For the test = FALSE case, then there are two pdf 
+  # plots, the pdf from the initial parameter estimates and another from the 
+  # final parameter estimates.
   
   if (test == TRUE){
     test.list <- A
