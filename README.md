@@ -45,6 +45,8 @@ For this algorithm convergence is reached when the difference between log-likeli
 
 - [Code for initialising and functions that contribute to the main teamEM function.](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/functions.R)
 
+- [Code for Error traps used in the teamEM function](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/ErrorChecks.R)
+
 
 ## Task 4: Function testing
 - [Link to script for the Testing of the EM algorithm, including the function that generates simulated data sets](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Testing%20EM.R)
@@ -100,14 +102,16 @@ $classResult
 In this test trial it becomes more evident with the inclusion of the probability density function described by the original parameters that then determined the Lengths generated. Comparing the shape that comes from the initial estimates to that of the real shape and how close the final estimate approach the real probability density function.
 
 ## Task 5: Results reporting
-
 | Parameter | mu | sigma | lambda |
 |-----------|----|-------|--------|
 | Age 1     | 23.39995  | 3.897076     | 0.2054526      |
 | Age 2     | 41.95479  | 5.488541     | 0.4531959      |
 | Age 3     | 67.06457  | 8.153021     | 0.3413516      |
  
-- Plot the original data with the densities of the mixture components superimposed.  Include your figure in the README file.
+![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Functions%20Histo.png)
+Plot of the original data with the densities of the mixture components superimposed.
+
+[Link to the code for where all the plots shown in the README.md file was generated](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Task1%20plots.R)
 
 ## Task 6: Work attribution
 
