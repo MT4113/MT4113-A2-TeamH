@@ -74,168 +74,91 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
   return(list(k_table = k_table, simData = sim.data.frame))
 }
 
-#gen.test.data()
+gen.test.data()
 
 
 #---------------Function for testing the Algorith Implementation----------------
 
-imp.test.em <- function(A, test = FALSE){
-  # The aim of this function is to show for each input data frame, "A", that the 
-  # outputs given by the teamEM function are as would be expected for the data 
-  # frame. In the case of test = TRUE, simulated data frame from the 
-  # gen.test.data function, enter as A, and the relevant data will be selected.
-  # 
+# Further additions to come here, going to quantify behaviour differently, can 
+# simuulated sets from above against their real parameters, if there is existence 
+# of the real data "behaviour" segment will be in comparison to that.
+# If there isn't any real data, as in the case of the original dataset, will only
+# compare to initial.
+
+imp.test.em <- function(A){
+  # Aiming to show for each input data frame, "A", that the outputs given by the 
+  # teamEM function are as would be expected for the data frame.
   # Input:
-  #       "A": the data frame, or gen.test.data() output, that you want to trial.
+  #       "A": the data frame that you want to trial.
   # Outputs:
   #       "conclusion": a list that displays the results of the tests on 
   #                     features of the output of teamEM(A).
-  #       "classResult": confirming values belong to expected class. If 1 then 
-  #                     that segment of teamEM returned in the class expected.
-  #       "classCheck": break down of checkResult, indicating which subset 
-  #                     returns 1 (True) and which 0 (False).
-  #       "behaviourCheck": table giving the values of the percentage 
-  #                     (or relative) difference in the pdfs displayed. This  
-  #                     should be used as a guide to how close the final 
-  #                     estimates are to the true pdf and how far they converged
-  #                     under the EM algorithm. 
-  # Output also includes a plot. For the test = TRUE case this will display pdfs 
-  # on a graph, the real pdf generated as part of gen.test.data function, the 
-  # pdf value given by the initial parameter estimates and the pdf given by 
-  # final parameter estimates. For the test = FALSE case, then there are two pdf 
-  # plots, the pdf from the initial parameter estimates and another from the 
-  # final parameter estimates.
+  #                     "classCheck": confirming values belong to expected class.
+  #                                   If 1 then that segment of teamEM returned
+  #                                   in the class expected.
+  #                     "behaviourCheck": comment on variation between initial 
+  #                                       estimates and final estimates
+  #                     "differencePercentage": diff in the closed integral of 
+  #                                       each curve as a percentage of closed 
+  #                                       integral of the initial estiamted pdf.
   
-  if (test == TRUE){
-    test.list <- A
-    result <- teamEM(test.list$simData)
-    data <- test.list$simData
-    k_table <- test.list$k_table
-    
-    # Output class checks: perfect score is 5
-    class.check <- data.frame(check = rep(0,5), 
-                              row.names =  c("estimates", "inits", "posterior", 
-                                             "likelihood", "converged"))
-    if (is.numeric(data.matrix(result$estimates)) == TRUE){class.check[1,1] <- 1}
-    if (is.numeric(data.matrix(result$inits)) == TRUE){class.check[2,1] <- 1}
-    if (is.numeric(data.matrix(result$posterior)) == TRUE){class.check[3,1] <- 1}
-    if (is.numeric(result$likelihood) == TRUE){class.check[4,1] <- 1}
-    if (is.logical(result$converged) == TRUE){class.check[5,1] <- 1}
-    
-    class.check.sum = sum(class.check)
-    class.result <- 0
-    if (class.check.sum == 5){class.result = "All outputs in form expected."}
-    else{class.result = "One or more outputs in a form unexpected."}
-    
-    # Creating pdfs to be used in the plot:
-    data <- na.omit(data)
-    uniq_ages <- unique(data$Age)
-    uniq_ages <-uniq_ages[order(uniq_ages)]
-    uniq_ages <- uniq_ages[uniq_ages != -1]
-    k_numb <- length(uniq_ages)
-    
-    y <- mapply(function(mu,sigma,lambda, base){
-      return(lambda*dnorm(base,mu,sigma))}, result$estimates$mu, 
-      result$estimates$sigma, result$estimates$lambda, 
-      MoreArgs=list(base = seq(0, 100, by = .1)))
-    z <- mapply(function(mu,sigma,lambda, base){
-      return(lambda*dnorm(base,mu,sigma))}, result$inits$mu, 
-      result$inits$sigma, result$inits$lambda, 
-      MoreArgs=list(base = seq(0, 100, by = .1)))
-    
-    w <- mapply(function(mu,sigma,lambda, base){
-      return(lambda*dnorm(base,mu,sigma))}, k_table$mu, 
-      k_table$sigma, k_table$lambda, 
-      MoreArgs=list(base = seq(0, 100, by = .1)))
-    
-    # Plotting pdfs against one another:
-    par(mfrow = c(1,1))
-    
-    plot(seq(0, 100, by = .1), y = rowSums(y), col = "red", type =  "l", 
-         xlab = " Length ", ylab = " Probability Density ", 
-         main = " Comparison Between Estimates")
-    lines(seq(0, 100, by = .1), y = rowSums(z), col = "blue" )
-    lines(seq(0, 100, by = .1), y = rowSums(w), col = "green")
-    legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates", "Real Estimates"), 
-           col = c("red", "blue", "green"), lty = 1:1, cex = .75)
-    par(mfrow = c(1,1))
-    
-    # Behavior: percentage difference given from difference in integrals over 
-    # discrete integral of prior curve.
-    behaviour <- data.frame(percentage_difference = rep(0,3), 
-                            row.names =  c("real to initial (%)", 
-                                           "real to final (%)", 
-                                           "initial to final (%)"))
-    
-    difference1 = abs(sum((rowSums(z)) - rowSums(w)))
-    difference2 = abs(sum((rowSums(y)) - rowSums(w)))
-    difference3 = abs(sum((rowSums(y)) - rowSums(z)))
-    
-    behaviour$percentage_difference[1] <- difference1/sum(rowSums(w))*100
-    behaviour$percentage_difference[2] <- difference2/sum(rowSums(w))*100
-    behaviour$percentage_difference[3] <- difference3/sum(rowSums(z))*100
-    
-  }else{ 
-    result <- teamEM(A) 
-    # Output class checks: perfect score is 5
-    class.check <- data.frame(check = rep(0,5), 
-                              row.names =  c("estimates", "inits", "posterior", 
-                                             "likelihood", "converged"))
-    if (is.numeric(data.matrix(result$estimates)) == TRUE){class.check[1,1] <- 1}
-    if (is.numeric(data.matrix(result$inits)) == TRUE){class.check[2,1] <- 1}
-    if (is.numeric(data.matrix(result$posterior)) == TRUE){class.check[3,1] <- 1}
-    if (is.numeric(result$likelihood) == TRUE){class.check[4,1] <- 1}
-    if (is.logical(result$converged) == TRUE){class.check[5,1] <- 1}
-    
-    class.check.sum = sum(class.check)
-    class.result <- 0
-    if (class.check.sum == 5){class.result = "All outputs in form expected."}
-    else{class.result = "One or more outputs in a form unexpected."}
-    
-    # Creating pdfs to be used in the plot:
-    data <- na.omit(data)
-    uniq_ages <- unique(A$Age)         
-    uniq_ages <-uniq_ages[order(uniq_ages)]
-    uniq_ages <- uniq_ages[uniq_ages != -1]
-    k_numb <- length(uniq_ages)
-    
-    y <- mapply(function(mu,sigma,lambda, base){
-      return(lambda*dnorm(base,mu,sigma))}, result$estimates$mu, 
-      result$estimates$sigma, result$estimates$lambda, 
-      MoreArgs=list(base = seq(0, 100, by = .1)))
-    z <- mapply(function(mu,sigma,lambda, base){
-      return(lambda*dnorm(base,mu,sigma))}, result$inits$mu, 
-      result$inits$sigma, result$inits$lambda, 
-      MoreArgs=list(base = seq(0, 100, by = .1)))
-    
-    # Plotting pdfs against one another:
-    par(mfrow = c(1,1))
-    plot(seq(0, 100, by = .1), y = rowSums(y), col = "red", type =  "l", 
-         ylim = c(0,.04), xlab = " Length ", ylab = " Probability Density ", 
-         main = " Comparison from Initial to Final Estimates")
-    lines(seq(0, 100, by = .1), y = rowSums(z), col = "blue" )
-    legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
-           col = c("red", "blue"), lty = 1:1, cex = .75)
-    par(mfrow = c(1,1))
-    
-    # Behavior: percentage difference given from difference in integrals over 
-    # discrete integral of prior curve.
-    behaviour <- data.frame(percentage_difference = rep(0,1), 
-                            row.names =  c("initial to final (%)"))
+  source("teamEM.R", local = TRUE)
 
-    difference = abs(sum((rowSums(y)) - rowSums(z)))
+  result <- teamEM(A)
+  
+  uniq_ages <- unique(A$Age)         
+  uniq_ages <-uniq_ages[order(uniq_ages)]
+  uniq_ages <- uniq_ages[uniq_ages != -1]
+  k_numb <- length(uniq_ages)
+  
+  #output class checks: perfect score is 5
+  class.check <- data.frame(check = rep(0,5), row.names =  c("estimates", "inits", "posterior", "likelihood", "converged"))
+  if (is.numeric(data.matrix(result$estimates)) == TRUE){class.check[1,1] <- 1}
+  if (is.numeric(data.matrix(result$inits)) == TRUE){class.check[2,1] <- 1}
+  if (is.numeric(data.matrix(result$posterior)) == TRUE){class.check[3,1] <- 1}
+  if (is.numeric(result$likelihood) == TRUE){class.check[4,1] <- 1}
+  if (is.logical(result$converged) == TRUE){class.check[5,1] <- 1}
+  print(class.check)
+  class.check.sum = sum(class.check)
+  class.result <- 0
+  if (class.check.sum == 5){class.result = "All outputs in form expected."}
+  else{class.result = "One or more outputs in a form unexpected."}
 
-    behaviour$percentage_difference[1] <- difference/sum(rowSums(z))*100
-    }
+  #behavior testing, are A's results as expected?:
+  
+  # shape testing specific
+  result <- teamEM(x)
+  y <- mapply(function(mu,sigma,lambda, base){return(lambda*dnorm(base,mu,sigma))}, result$estimates$mu, 
+              result$estimates$sigma, result$estimates$lambda, 
+              MoreArgs=list(base = seq(0, 100, by = .1)))
+  z <- mapply(function(mu,sigma,lambda, base){return(lambda*dnorm(base,mu,sigma))}, result$inits$mu, 
+              result$inits$sigma, result$inits$lambda, 
+              MoreArgs=list(base = seq(0, 100, by = .1)))
+  
+  par(mfrow = c(1,1))
+  xdata <- x$Length
+  
+  base <- seq(0, 100, by = .1) 
+  plot(base, y = rowSums(y), col = "red", type =  "l", ylim = c(0,.04), xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
+  lines(base, y = rowSums(z), col = "blue" )
+  legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
+         col = c("red", "blue"), lty = 1:1, cex = .75)
+  
+  par(mfrow = c(1,1))
+  
+  #check known data to compare to initials and final estimates
+  difference = abs(sum(rowSums(y) - rowSums(z)))
+  relative.diff <- difference/sum(z)*100
+  
+  behaviour <- 0
+  if (relative.diff > 10){behaviour = "Large variation between initial estimated distribtion and final estimated distribution."}
+  if(relative.diff <= 10){behaviour = "Small variation between initial estimated distribtion and final estimated distribution."}
   
   
-  conclusion <- list(classResult = class.result, classCheck = class.check, 
-                     behaviourCheck = behaviour)
+  conclusion <- list(classResult = class.result, classCheck = class.check, behaviourCheck = behaviour, differencePercentage = c(relative.diff, "%"))
   
   return(conclusion)
 }
-
-#----------------------------Other Testing Functions----------------------------
 
 test_ErrorChecks <- function(x){
   #Funciton to iterate some of the testing for booleans and numeric values
@@ -268,10 +191,7 @@ testing_ErrorChecks <- function(){
   
   source("ErrorChecks.R", local = TRUE)
   
-  #Set values to test 
   tmp <- c(1,-1,1.1,-1.1)
-  
-  #test booleans and numeric values
   for (i in tmp){
     print(test_ErrorChecks(i))
   }
@@ -280,7 +200,6 @@ testing_ErrorChecks <- function(){
     print(test_ErrorChecks(i))
   }
   
-  #Test various dataframes
   df <- data.frame(Age = c(1,2,1,2,1,NA), Length = c(1,2,3,1,2,1))
   print(df_check(df)) #True
   
@@ -313,31 +232,28 @@ testing_ErrorChecks <- function(){
 }
 #testing_ErrorChecks()
 
-test_functions <- function(x){
-  # Tests all the functions that are called in _teamEM()_ to ensure the 
-  # correct outputs are given base on the inputs given. Check of values is 
-  # done by eye/hand/not computer. The focus of this test to ensure outputs are 
-  # correctly formatted
+test_functions <- function(){
+  # Tests to ensure the inputs and outputs are of the correct form 
   # Outputs: Various tables for visual inspection of data 
   
   source("functions.R", local = TRUE)
-  
-  #Age initalization
+  #This is to be replaced by a generated dataframe 
+  load("FishLengths.RData")
   x$Age[is.na(x$Age)] <- -1
-  ages <- unique(x$Age)
-  ages <- ages[order(ages)]
-  ages <- ages[ages != -1]
+  x$FishID <- NULL
+  
+  ages <- c(1,2,3)
   
   # Prints length(ages)x3 matrix of estimates
   # values in matrix should be slightly different due to different arguments 
   # for each function
+  
+  # Prints inital estimates
   k_tab <- init_data_ests(x,ages)
-  print("init_data_ests")
   print(k_tab) 
   
   # Prints estimates for both inc_known_init cases. Should be different from
   # each other but not too signifigant
-  print("init_prob_ests")
   print(init_prob_ests(k_tab, length(ages), T, x[x$Age == -1, ], 
                        x[x$Age != -1, ], ages))
   print(init_prob_ests(k_tab, length(ages), F, x[x$Age == -1, ], 
@@ -346,7 +262,6 @@ test_functions <- function(x){
   # Contains two Columns of data one is Length and len(age) cols of probabilites
   # There are apply errors when only one column is specified.
   # First case is known ages, 2nd case is all ages, 3rd is all unknown ages
-  print("prob_ests")
   print(head(prob_ests(x[x$Age != -1, ], k_tab, length(ages))))
   print(head(prob_ests(x, k_tab, length(ages))))
   prob_tab_test <- prob_ests(x[x$Age == -1, ], k_tab, length(ages))
@@ -355,47 +270,13 @@ test_functions <- function(x){
   # Prints length(ages)x3 matrix of estimates
   # values in matrix should be slightly different due to different arguments 
   # for each function
-  print("max_ests")
   print(max_ests(prob_tab_test, k_tab, length(ages), F, x[x$Age != -1, ]))
   print(max_ests(prob_tab_test, k_tab, length(ages), T, x[x$Age != -1, ]))
   
   # Prints a likelihood, should be negatively values 
-  print("likelihood")
   print(likelihood(x[x$Age != -1, ], k_tab, length(ages)))
 }
+#test_functions()
 
-# q <- gen.test.data()
-# test_functions(q$simData)
 
-working_test <- function(){
-  # This function tests our function against the actual expectation maximization 
-  # algorithmic function in mixtools using a randomly generated dataset  
-  # generated in the function. Comparison is done through print output 
-  # 
-  # Output: 
-  #   The table of mu, sigma and lambda and the log likelihood for both our 
-  #   function and mixtools 
-  
-  library(mixtools)
-  source("teamEM.R", local = TRUE)
-  q <- gen.test.data()
-      # gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ), 
-      #                sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7), 
-      #                continuous = FALSE)
-  
-  print("Data generated...")
-  
-  mine <- teamEM(q$simData, inc_known_as_unknown_iter = T)
-  print("teamEM results generated...")
-  
-  actual <- normalmixEM(q$simData$Length, mu = q$k_table$mu, sigma = q$k_table$sigma, lambda = q$k_table$lambda,
-              epsilon = 1e-08, maxit = 1000)
-  print("actual results generated...")
-  
-  actual_k <- data.frame(actual$mu,actual$sigma, actual$lambda )
-  print(mine$estimates)
-  print(actual_k)
-  print(mine$likelihood[length(mine$likelihood)])
-  print(actual$loglik)
-}
-#working_test()
+

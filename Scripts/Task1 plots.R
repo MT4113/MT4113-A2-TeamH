@@ -10,10 +10,9 @@ Plot1 <- ggplot(Fish_Length, aes(Age, Length)) +
          geom_point(aes(colour = factor(Age))) +
          xlab(" Age Category " ) + ylab(" Fish Length in Cm ") +
          theme_dark() + ggtitle(" Scatterplot between Fish Length and Age ")+
-         stat_summary(fun.y = " mean ",
+         stat_summary(fun.y="mean",
                       colour = "white", geom = "line",group = 1)
   
-        
 Plot1
 
 #Box-Plot between Fish Length and Age
@@ -49,7 +48,8 @@ Plot4 <- ggplot(Fish_Length, aes(x = Length, y = ..density.. )) +
          xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark() 
 
 Plot4        
-     
+#Density histogram of mixture components superimposed     
+#Using the teamEM fucntion results to plot 
 source("teamEM.R", local = TRUE)
 
 pdf <- function(x, k_tab){
@@ -63,12 +63,20 @@ results <- teamEM(x)
 ests <- results$estimates 
 
 Plot5 <- ggplot(Fish_Length, aes(x = Length)) + 
+<<<<<<< HEAD
+         geom_histogram(aes(y = ..density..),
+         breaks = seq(15, 90, by=5), colour = "black",fill = " steelblue ") +
+         stat_function(fun = pdf, args = list(k_tab = ests), color = "white")+ 
+         ggtitle(" Density histogram of Fish Length ") +
+         xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark()
+=======
          geom_histogram(aes(y = ..density..), binwidth = (5), colour = "black", 
                        fill = " steelblue ") +
         stat_function(fun = pdf, args = list(k_tab = ests), color = "red")+ 
         ggtitle(" Density histogram of Fish Length ") +
         xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark()
 
+>>>>>>> 7ccc52209b01196c5d838cb8713808f6bc391742
 Plot5
 
 
