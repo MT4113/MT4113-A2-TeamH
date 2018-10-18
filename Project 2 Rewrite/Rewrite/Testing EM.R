@@ -256,7 +256,10 @@ testing_ErrorChecks <- function(){
   
   source("ErrorChecks.R", local = TRUE)
   
+  #Set values to test 
   tmp <- c(1,-1,1.1,-1.1)
+  
+  #test booleans and numeric values
   for (i in tmp){
     print(test_ErrorChecks(i))
   }
@@ -265,6 +268,7 @@ testing_ErrorChecks <- function(){
     print(test_ErrorChecks(i))
   }
   
+  #Test various dataframes
   df <- data.frame(Age = c(1,2,1,2,1,NA), Length = c(1,2,3,1,2,1))
   print(df_check(df)) #True
   
@@ -298,14 +302,16 @@ testing_ErrorChecks <- function(){
 #testing_ErrorChecks()
 
 test_functions <- function(x){
-  # Tests to ensure the inputs and outputs are of the correct form 
+  # Tests all the functions that are called in _teamEM()_ to ensure the 
+  # correct outputs are given base on the inputs given. Check of values is 
+  # done by eye/hand/not computer. The focus of this test to ensure outputs are 
+  # correctly formatted
   # Outputs: Various tables for visual inspection of data 
   
   source("functions.R", local = TRUE)
-  #This is to be replaced by a generated dataframe 
-  x$Age[is.na(x$Age)] <- -1
-
   
+  #Age initalization
+  x$Age[is.na(x$Age)] <- -1
   ages <- unique(x$Age)
   ages <- ages[order(ages)]
   ages <- ages[ages != -1]
@@ -313,8 +319,6 @@ test_functions <- function(x){
   # Prints length(ages)x3 matrix of estimates
   # values in matrix should be slightly different due to different arguments 
   # for each function
-  
-  # Prints inital estimates
   k_tab <- init_data_ests(x,ages)
   print("init_data_ests")
   print(k_tab) 
@@ -352,9 +356,20 @@ test_functions <- function(x){
 # test_functions(q$simData)
 
 working_test <- function(){
-  q <- gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ), 
-                     sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7), 
-                     continuous = FALSE)
+  # This function tests our function against the actual expectation maximization 
+  # algorithmic function in mixtools using a randomly generated dataset  
+  # generated in the function. Comparison is done through print output 
+  # 
+  # Output: 
+  #   The table of mu, sigma and lambda and the log likelihood for both our 
+  #   function and mixtools 
+  
+  library(mixtools)
+  
+  q <- gen.test.data()
+      # gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ), 
+      #                sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7), 
+      #                continuous = FALSE)
   
   print("Data generated...")
   
