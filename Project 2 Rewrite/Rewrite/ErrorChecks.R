@@ -11,7 +11,7 @@ df_check <- function(df){
   #     - A dataframe with Length and Age columns named
   #     - Non-empty values in the Length column and that all values are of  
   #       numeric type
-  #     - Numeric Age column with at least one unique non-null age and all ages  
+  #     - Numeric (non-factor) Age column with at least one unique non-null age and all ages  
   #       are greater or equal to 0. 
   #   Returns False otherwise.
   
@@ -25,10 +25,10 @@ df_check <- function(df){
       if(length(df$Length[is.na(df$Length)]) == 0){  
         # Ensures of at least one unique age catagory 
         if(length(unique(df$Age)) >= 1 & (length(df$Age[is.na(df$Age)]) > 0) ){
-        
           # Tests for negative values in ages
           tmp_ages <- unique(df$Age)
           if(length(tmp_ages) == length(tmp_ages[tmp_ages >= 0])){
+            print("here")
           flag = TRUE
         }
       } 
