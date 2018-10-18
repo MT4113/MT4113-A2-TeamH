@@ -8,9 +8,10 @@ library(ggplot2)
 #Scatterplot between Fish Length and Age
 Plot1 <- ggplot(Fish_Length, aes(Age, Length))+
          geom_point(aes(colour = factor(Age)))+
-         xlab(" Age" ) + ylab(" Fish Length in Cm ")+
+         xlab(" Age in years" ) + ylab(" Fish Length in Cm ")+
          theme_dark() + ggtitle(" Scatterplot between Fish Length and Age")+
-         stat_summary(fun.y="mean", geom="point")
+         stat_summary(fun.y = "mean",colour="white", geom = "line",group=1)
+        
 Plot1
 
 #Histogram of Fish Length and it's count 
