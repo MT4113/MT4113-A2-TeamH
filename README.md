@@ -50,6 +50,7 @@ For this algorithm convergence is reached when the difference between log-likeli
 
 **Demonstrating that implementing the EM algorithm with similar data sets** 
 For comparison, first it will be demonstrated with the original data set "x". The function imp.test.em(x) gives the output:
+
 $classResult
 [1] "All outputs in form expected."
 
@@ -75,7 +76,25 @@ As you can see from the chart above the two probability density functions don't 
 
 Now for testing a simulated data frame made out of similar data sets from the gen.test.data(), this time looking at the output of imp.test.em(gen.test.data(), test = TRUE).
 
+$classResult
+[1] "All outputs in form expected."
 
+|Class Check|check|
+|-----------|-----|
+|estimates  |  1  |
+|inits      |  1  |
+|posterior  |  1  |
+|likelihood |  1  |
+|converged  |  1  |
+
+
+|Behaviour Check     |percentage_difference|
+|--------------------|---------------------|
+|real to initial (%) |          0.024672079|
+|real to final (%)   |          0.008049152|
+|initial to final (%)|          0.032713160|
+
+![Fig7](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/SimulationRplot.png)
 
 ## Task 5: Results reporting
 
