@@ -83,10 +83,10 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #       Unknown Obvs 1 ... Unknown Obvs m). This ordering is for 
   #     inc_known_as_unknown_iter = FALSE as known data is treated as 
   #     unknown data when inc_known_as_unknown_iter = TRUE
-  #   * The columns for estimates and inits are numbed based on the value for the 
-  #     age category. 
-  #   * If a sigma estimate cannot be obtained based on the known data, it is set
-  #     to 10 and a warning is produced.
+  #   * The columns for estimates and inits are numbed based on the value for  
+  #     the age category. 
+  #   * If a sigma estimate cannot be obtained based on the known data, it is 
+  #     set to 10 and a warning is produced.
   #   * If a sigma estimate cannot be obtained based on the first guesses to the 
   #     age category based on first estimates from known values, then the value 
   #     for sigma taken from the first initial estimate is used instead and a 
@@ -195,8 +195,8 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
     
     #Generated warning
     warning(paste("Insuffient estimated observations to generate an estimate ",  
-              "for sigma.\n  Undertermined values of Sigma are set to initally ", 
-              "calculated estimates shown in $init"))
+              "for sigma.\n  Undertermined values of Sigma are set to ", 
+              "initally calculated estimates shown in $init"))
   }
 
   
