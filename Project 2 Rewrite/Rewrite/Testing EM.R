@@ -154,7 +154,9 @@ imp.test.em <- function(A, test = FALSE){
     # Behavior: percentage difference given from difference in integrals over 
     # discrete integral of prior curve.
     behaviour <- data.frame(percentage_difference = rep(0,3), 
-                            row.names =  c("real to initial (%)", "real to final (%)", "initial to final (%)"))
+                            row.names =  c("real to initial (%)", 
+                                           "real to final (%)", 
+                                           "initial to final (%)"))
     
     difference1 = abs(sum((rowSums(z)) - rowSums(w)))
     difference2 = abs(sum((rowSums(y)) - rowSums(w)))
@@ -215,7 +217,8 @@ imp.test.em <- function(A, test = FALSE){
     }
   
   
-  conclusion <- list(classResult = class.result, classCheck = class.check, behaviourCheck = behaviour)
+  conclusion <- list(classResult = class.result, classCheck = class.check, 
+                     behaviourCheck = behaviour)
   
   return(conclusion)
 }
