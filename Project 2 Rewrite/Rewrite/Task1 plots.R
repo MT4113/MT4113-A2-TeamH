@@ -51,7 +51,15 @@ Plot4 <- ggplot(Fish_Length, aes(x = Length, y = ..density.. )) +
 Plot4        
      
 source("teamEM.R", local = TRUE)
-results <- teamEM(x)
+
+pdf <- function(x, k_tab){
+  rowSums(mapply(function(mu,sigma,lambda,x){return(lambda*dnorm(x,mu,sigma))},
+                 k_tab$mu, k_tab$sigma, k_tab$lambda, MoreArgs = list(x = x)))
+  
+}
+#For some reason Fish_Length is assigned to be a factor when we require it
+#to be numeric, so we use x instead of Fish_Length
+results <- teamEM(x) 
 ests <- results$estimates 
 
 Plot5 <- ggplot(Fish_Length, aes(x = Length)) + 
@@ -59,11 +67,8 @@ Plot5 <- ggplot(Fish_Length, aes(x = Length)) +
                        fill = " steelblue ") +
         stat_function(fun = pdf, args = list(k_tab = ests), color = "red")+ 
         ggtitle(" Density histogram of Fish Length ") +
-        xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark() ; Plot5
+        xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark()
+
+Plot5
 
 
-pdf <- function(x, k_tab){
-   rowSums(mapply(function(mu,sigma,lambda,x){return(lambda*dnorm(x,mu,sigma))},
-                  k_tab$mu, k_tab$sigma, k_tab$lambda, MoreArgs = list(x = x)))
-  
-}
