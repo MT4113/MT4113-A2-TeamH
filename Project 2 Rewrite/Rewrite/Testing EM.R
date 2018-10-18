@@ -377,7 +377,7 @@ working_test <- function(){
   #   function and mixtools 
   
   library(mixtools)
-  
+  source("teamEM.R", local = TRUE)
   q <- gen.test.data()
       # gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ), 
       #                sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7), 
@@ -398,4 +398,4 @@ working_test <- function(){
   print(mine$likelihood[length(mine$likelihood)])
   print(actual$loglik)
 }
-# working_test()
+#working_test()
