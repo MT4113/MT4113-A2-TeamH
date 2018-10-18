@@ -45,14 +45,12 @@
 
 ## Task 5: Results reporting
 
-- Include a table of the estimates returned by `teamEM()` 
-
 | Parameter | mu | sigma | lambda |
 |-----------|----|-------|--------|
-| Age 1     | #  | #     | #      |
-| Age 2     | #  | #     | #      |
-| Age 3     | #  | #     | #      |
-
+| Age 1     | 23.39995  | 3.897076     | 0.2054526      |
+| Age 2     | 41.95479  | 5.488541     | 0.4531959      |
+| Age 3     | 67.06457  | 8.153021     | 0.3413516      |
+ 
 - Plot the original data with the densities of the mixture components superimposed.  Include your figure in the README file.
 
 ## Task 6: Work attribution
@@ -62,3 +60,5 @@
 - In one sentence per team member, describe who did what (e.g., A wrote function x, tested function y, documented function z).
 
 Charlotte: Wrote original functions for the Initialisation functions (before further optimisation and consistency edits), put together plots for Data Exploration stage and wrote and tested the Testing function from Task 4.
+
+Bryant: General project oversight, optimized code, reviewed code, figure and reports, coded the itertative portion of the EM algorithim, documented and commented existing code. 
