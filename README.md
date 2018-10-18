@@ -13,7 +13,7 @@
 
 ![Fig1](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Scatterplot.png)
 
-* The Scatter plot between Fish Length and Age displays the exponential increase in length from Age 1 to Age 2, with the highest lengths of Age 1 and Age 2 being 31cm and 59.8 cm respectively. The mean length of fish from classes 1-3 are 21.4cm, 42.1cm and 67.7cm respectively.  
+The Scatter plot between Fish Length and Age displays the exponential increase in length from Age 1 to Age 2, with the highest lengths of Age 1 and Age 2 being 31cm and 59.8 cm respectively. The mean length of fish from classes 1-3 are 21.4cm, 42.1cm and 67.7cm respectively. The mean fish length was found to be 46.68717 cm. The mean line is displayed in white, passing through the mean Fish lengths of each Age Categories.  
 
 ![Fig2](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Boxplot.png)
 
