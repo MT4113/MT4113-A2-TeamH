@@ -1,4 +1,3 @@
-load("FishLengths.RData") 
 teamEM <- function(data, epsilon = 1e-08, maxit = 1000, 
                    inc_known_init = FALSE, inc_known_iter = FALSE,
                    inc_known_as_unknown_init = FALSE, 
