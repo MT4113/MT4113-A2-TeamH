@@ -143,8 +143,6 @@ Plot of the original data with the densities of the mixture components superimpo
 
 - I confirm that this repository is the work of our team, except where clearly indicated in the text.
 
-- In one sentence per team member, describe who did what (e.g., A wrote function x, tested function y, documented function z).
-
 Charlotte: Wrote original functions for the Initialisation functions (before further optimisation and consistency edits), put together plots for Data Exploration stage and wrote and tested the function for generating similar data sets (gen.test.data) and the function to implement testing of the EM algorithm and compare with expected results (imp.test.em), using both the original data and similar dadta sets.
 
 Bryant: General project oversight, optimized code, reviewed code figures and reports, coded the itertative portion of the EM algorithim, documented and commented existing code, tested teamEM.R and functions.R for correct inputs/outputs, and offered coding aid to team members on small misc tasks. 
