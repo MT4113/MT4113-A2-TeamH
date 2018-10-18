@@ -75,7 +75,7 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
   return(list(k_table = k_table, simData = sim.data.frame))
 }
 
-gen.test.data()
+#gen.test.data()
 
 
 #---------------Function for testing the Algorith Implementation----------------
@@ -302,17 +302,21 @@ testing_ErrorChecks <- function(){
 }
 #testing_ErrorChecks()
 
-test_functions <- function(){
+test_functions <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68), 
+                           sigma = c(4, 5.5, 8.15), age = c(2,3,4), 
+                           continuous = FALSE){
   # Tests to ensure the inputs and outputs are of the correct form 
-  # Outputs: Various tables for visual inspection of data 
+  # Inputs: 
+  #    Arguments to be passed to gen.test.data
+  # Outputs: 
+  #   Various tables for visual inspection of data 
   
   source("Scripts/functions.R", local = TRUE)
   #This is to be replaced by a generated dataframe 
-  load("FishLengths.RData")
+  x <- gen.test.data(n ,known ,mu ,sigma, age, continuous)$simData
+  print(head(x))
   x$Age[is.na(x$Age)] <- -1
-  x$FishID <- NULL
-  
-  ages <- c(1,2,3)
+  ages <- age
   
   # Prints length(ages)x3 matrix of estimates
   # values in matrix should be slightly different due to different arguments 
@@ -350,23 +354,21 @@ test_functions <- function(){
 
 # q <- gen.test.data()
 # test_functions(q$simData)
-working_test <- function(){
+working_test <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68), 
+                         sigma = c(4, 5.5, 8.15), age = c(2,3,4), 
+                         continuous = FALSE){
   # This function tests our function against the actual expectation maximization
   # algorithmic function in mixtools using a randomly generated dataset
   # generated in the function. Comparison is done through print output
-  #
+  # Inputs: 
+  #    Arguments to be passed to gen.test.data
   # Output:
-  # The table of mu, sigma and lambda and the log likelihood for both our
-  # function and mixtools
+  #   The table of mu, sigma and lambda and the log likelihood for both our
+  #   function and mixtools
   
   library(mixtools)
   source("Scripts/teamEM.R", local = TRUE)
-  q <- gen.test.data()
-  
-  # # A case where the paramaters are different 
-  # gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ),
-  # sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7),
-  # continuous = FALSE)
+  q <- gen.test.data(n ,known ,mu ,sigma, age, continuous)
   
   print("Data generated...")
   

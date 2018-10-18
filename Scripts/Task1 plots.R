@@ -39,7 +39,6 @@ Plot3
 #Creating X,Y to get the Normal Curve of Fish Length
 X <- seq(14, 90, length.out=1000)
 Y <- with(Fish_Length, dnorm(X, mean(Length), sd(Length)))
-lines(X, Y, col = "red")
 
 #Density Histogram of Fish Length
 Plot4 <- ggplot(Fish_Length, aes(x = Length, y = ..density.. )) +
