@@ -51,7 +51,7 @@ For this algorithm convergence is reached when the difference between log-likeli
 ## Task 4: Function testing
 - [Link to script for the Testing of the EM algorithm, including the function that generates simulated data sets](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Testing%20EM.R)
 
-**Demonstrating that implementing the EM algorithm with similar data sets** 
+### Demonstrating that implementing the EM algorithm with similar data sets
 For comparison, first it will be demonstrated with the original data set "x". The function imp.test.em(x) gives the output:
 
 $classResult
@@ -100,6 +100,13 @@ $classResult
 ![Fig7](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/SimulationRplot.png)
 
 In this test trial it becomes more evident with the inclusion of the probability density function described by the original parameters that then determined the Lengths generated. Comparing the shape that comes from the initial estimates to that of the real shape and how close the final estimate approach the real probability density function.
+
+### Demonstrating correct inputs/outputs of functions in function
+In Testing EM.R, the function test_functions() tests that the correct inputs are being fed into each function in the teamEM function by printing sample outputs from each function, which can be examined visually in the console. 
+
+### Demonstrating similarity to normalmixEM
+In Testing EM.R, the function working_test() tests a randomly generated valid dataframe from gen.test.data() by generating outputs of the mu, sigma and lambda and the final log likelihood in both teamEM() and normalmixEM() from the mixtools library. Test results for simluated data yielded similar results, often accurate to the 4th decimal place for mu, sigma and lambda estimates, and the same loglikelihood values. This is shown in the output of working_test().
+
 
 ## Task 5: Results reporting
 | Parameter | mu | sigma | lambda |
