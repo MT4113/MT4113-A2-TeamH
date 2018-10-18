@@ -25,7 +25,7 @@
 
 ![Fig4](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Density%20Histo.png)
 
-*	The Fish length data as predicted does not follow Normal distribution and has an Undefined Bi-Modal Shape.
+*	The Fish length data as predicted does not follow Normal distribution and has an Undefined Tri-Modal Shape.
 
 
 ## Task 2: Methods description
