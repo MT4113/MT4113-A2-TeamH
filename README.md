@@ -17,7 +17,7 @@ The Scatter plot between Fish Length and Age displays the exponential increase i
 
 ![Fig2](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Boxplot.png)
 
-* The mean fish length was found to be 46.68717 cm.
+The Fish lengths of Age1 shows less variability as compared to the other Age Fish lengths. Fish lengths of Age1 have the mean and median coinciding (approx.) and it can be said that the Fish lengths of Age 1 follow Normal distribution. The Min and Max Fish Length of Age 1 are 14.4 cm and 31cm respectively.  Age 2 Fish Lengths are skewed to the right with standard deviation of 6.704027. The Min and Max Fish Length of Age 2 are 28.9cm and 59.8cm respectively. The Fish length of Age 3 is slightly skewed to the left with standard deviation of 8.649106. The Min and Max Fish Length of Age 3 are 52.3cm and 87cm respectively. 
 
 ![Fig3](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Plain%20Histo.png)
 *	From the Summary Stats table we can observe the increase in Sd, suggesting increase in variation for the length of fishes from Age class 1-3. 
