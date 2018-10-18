@@ -1,7 +1,7 @@
 teamEM <- function(data, epsilon = 1e-08, maxit = 1000, 
                    inc_known_init = FALSE, inc_known_iter = FALSE,
                    inc_known_as_unknown_init = FALSE, 
-                   inc_known_as_unknown_iter = FALSE, 
+                   inc_known_as_unknown_iter = T, 
                    inc_known_in_ll = FALSE,
                    roundAge = FALSE){
   
@@ -28,7 +28,7 @@ teamEM <- function(data, epsilon = 1e-08, maxit = 1000,
   #   inc_known_iter - Boolean value when set to TRUE includes known fish ages
   #                      in the iteration and maximization step algorithm when 
   #                      estimating parameters mu, sigma and lambda. 
-  #                      Default is FALSE
+  #                      Default is TRUE
   #   inc_known_as_unknown_init - Boolean value when set to TRUE includes known 
   #                               fish ages in the initialization step of the 
   #                               algorithm when estimating parameters mu, sigma
