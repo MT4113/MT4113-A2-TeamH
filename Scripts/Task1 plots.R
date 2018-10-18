@@ -65,7 +65,7 @@ ests <- results$estimates
 Plot5 <- ggplot(Fish_Length, aes(x = Length)) + 
          geom_histogram(aes(y = ..density..), binwidth = (5), colour = "black", 
                        fill = " steelblue ") +
-        stat_function(fun = pdf, args = list(k_tab = ests), color = "red")+ 
+        stat_function(fun = pdf, args = list(k_tab = ests), color = "white")+ 
         ggtitle(" Density histogram of Fish Length ") +
         xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark()
 
