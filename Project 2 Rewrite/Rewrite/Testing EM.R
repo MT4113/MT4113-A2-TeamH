@@ -79,34 +79,36 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
 
 #---------------Function for testing the Algorith Implementation----------------
 
-# Further additions to come here, going to quantify behaviour differently, can 
-# simuulated sets from above against their real parameters, if there is existence 
-# of the real data "behaviour" segment will be in comparison to that.
-# If there isn't any real data, as in the case of the original dataset, will only
-# compare to initial.
 imp.test.em <- function(A, test = FALSE){
   # Aiming to show for each input data frame, "A", that the outputs given by the 
-  # teamEM function are as would be expected for the data frame.
+  # teamEM function are as would be expected for the data frame. In the case of 
+  # test = TRUE, simulated data frame from the gen.test.data function, enter as A,  
+  # and the relevant data will be selected.
   # Input:
-  #       "A": the data frame that you want to trial.
+  #       "A": the data frame, or gen.test.data() output, that you want to trial.
   # Outputs:
   #       "conclusion": a list that displays the results of the tests on 
   #                     features of the output of teamEM(A).
-  #                     "classCheck": confirming values belong to expected class.
+  #                     "classResult": confirming values belong to expected class.
   #                                   If 1 then that segment of teamEM returned
   #                                   in the class expected.
+  #                     "classCheck":
   #                     "behaviourCheck": comment on variation between initial 
   #                                       estimates and final estimates
-  #                     "differencePercentage": diff in the closed integral of 
-  #                                       each curve as a percentage of closed 
-  #                                       integral of the initial estiamted pdf.
+  #       Output also includes a plot. For the test = TRUE case this will display 
+  #       pdfs on a graph, the real pdf generated as part of gen.test.data() function, 
+  #       the pdf value given by the initial parameter estimates and the pdf given by 
+  #       final parameter estimates. For the test = FALSE case, then there are two
+  #       pdf plots, the pdf from the initial parameter estimates and another from
+  #       the final parameter estimates.
+  
   if (test == TRUE){
     test.list <- A
     result <- teamEM(test.list$simData)
     data <- test.list$simData
     k_table <- test.list$k_table
     
-    #output class checks: perfect score is 5
+    # Output class checks: perfect score is 5
     class.check <- data.frame(check = rep(0,5), 
                               row.names =  c("estimates", "inits", "posterior", 
                                              "likelihood", "converged"))
@@ -120,6 +122,8 @@ imp.test.em <- function(A, test = FALSE){
     class.result <- 0
     if (class.check.sum == 5){class.result = "All outputs in form expected."}
     else{class.result = "One or more outputs in a form unexpected."}
+    
+    # Creating pdfs to be used in the plot:
     data <- na.omit(data)
     uniq_ages <- unique(data$Age)
     uniq_ages <-uniq_ages[order(uniq_ages)]
@@ -139,7 +143,8 @@ imp.test.em <- function(A, test = FALSE){
       return(lambda*dnorm(base,mu,sigma))}, k_table$mu, 
       k_table$sigma, k_table$lambda, 
       MoreArgs=list(base = seq(0, 100, by = .1)))
-    # Plotting: style depends whether you've indicated it's a test or not.
+    
+    # Plotting pdfs against one another:
     par(mfrow = c(1,1))
     
     plot(seq(0, 100, by = .1), y = rowSums(y), col = "red", type =  "l", 
@@ -168,7 +173,7 @@ imp.test.em <- function(A, test = FALSE){
     
   }else{ 
     result <- teamEM(A) 
-    #output class checks: perfect score is 5
+    # Output class checks: perfect score is 5
     class.check <- data.frame(check = rep(0,5), 
                               row.names =  c("estimates", "inits", "posterior", 
                                              "likelihood", "converged"))
@@ -183,6 +188,8 @@ imp.test.em <- function(A, test = FALSE){
     if (class.check.sum == 5){class.result = "All outputs in form expected."}
     else{class.result = "One or more outputs in a form unexpected."}
     
+    # Creating pdfs to be used in the plot:
+    data <- na.omit(data)
     uniq_ages <- unique(A$Age)         
     uniq_ages <-uniq_ages[order(uniq_ages)]
     uniq_ages <- uniq_ages[uniq_ages != -1]
@@ -197,6 +204,7 @@ imp.test.em <- function(A, test = FALSE){
       result$inits$sigma, result$inits$lambda, 
       MoreArgs=list(base = seq(0, 100, by = .1)))
     
+    # Plotting pdfs against one another:
     par(mfrow = c(1,1))
     plot(seq(0, 100, by = .1), y = rowSums(y), col = "red", type =  "l", 
          ylim = c(0,.04), xlab = " Length ", ylab = " Probability Density ", 
