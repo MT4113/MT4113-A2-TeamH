@@ -13,6 +13,7 @@
 
 The scatter plot of Fish Length and Age displays a positive linear increase in length as age increases. This trend is displayed with the white line in the plot above. 
 
+<br></br>
 
 
 | Age       | Mean      | Std.Dv     | Min    | Q25    | Median | Q75     | Max   |
@@ -23,24 +24,25 @@ The scatter plot of Fish Length and Age displays a positive linear increase in l
 
 The table above illustrates the mean, standard deviation, median, min, max, and 25% and 75% quantiles of fish lengths for fish of known age.  Note that the standard deviations increase as the age which suggests a non-uniform standard deviation (potentially a linear model if trying to fit a model of a single distribution)
 
-
+<br></br>
 
 ![Fig2](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Final%20Boxplot.png)
 
 The figure above is a visualization of the previous chart, and shows that for the fish of known ages, there are distinct groupings of length for each age category.   
 
-
+<br></br>
 
 ![Fig3](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Plain%20Histo.png)
 
 The histogram above contains an undefined Tri-Modal Shape, which suggests that a single distribution may not be the best choice for the model. We should can consider testing a Gaussian mixture distribution for three catagories.  
 
-
+<br></br>
 
 ![Fig4](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Density%20Histo.png)
 
 The histogram overlaid with a normal curve clearly shows that a normal distribution is not suitable for the data due to the undefined tri-modal shape.
 
+<br></br>
 
 ## Task 2: Methods description
 
