@@ -61,4 +61,4 @@
 
 Charlotte: Wrote original functions for the Initialisation functions (before further optimisation and consistency edits), put together plots for Data Exploration stage and wrote and tested the Testing function from Task 4.
 
-Bryant: General project oversight, optimized code, reviewed code, figure and reports, coded the itertative portion of the EM algorithim, documented and commented existing code. 
+Bryant: General project oversight, optimized code, reviewed code figures and reports, coded the itertative portion of the EM algorithim, documented and commented existing code, and offered coding aid to team members on small misc tasks. 
