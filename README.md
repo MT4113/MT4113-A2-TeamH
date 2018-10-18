@@ -66,3 +66,5 @@ The first part of the EM algorithm is initialization. Firstly, function (1) is c
 Charlotte: Wrote original functions for the Initialisation functions (before further optimisation and consistency edits), put together plots for Data Exploration stage and wrote and tested the function for generating similar data sets (gen.test.data) and the function to implement testing of the EM algorithm and compare with expected results (imp.test.em), using both the original data and similar dadta sets.
 
 Bryant: General project oversight, optimized code, reviewed code figures and reports, coded the itertative portion of the EM algorithim, documented and commented existing code, tested teamEM.R and functions.R for correct inputs/outputs, and offered coding aid to team members on small misc tasks. 
+
+Yulia: Wrote original functions for the Likelihood functions (before further opitmisation and consistency edits). Created the flow-chart showing the team approach and wrote the description of the EM-algorithm.
