@@ -96,6 +96,8 @@ $classResult
 
 ![Fig7](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/SimulationRplot.png)
 
+In this test trial it becomes more evident with the inclusion of the probability density function described by the original parameters that then determined the Lengths generated. Comparing the shape that comes from the initial estimates to that of the real shape and how close the final estimate approach the real probability density function.
+
 ## Task 5: Results reporting
 
 | Parameter | mu | sigma | lambda |
