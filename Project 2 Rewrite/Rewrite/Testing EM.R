@@ -6,11 +6,19 @@
 # distribution. For testing use third output, the data frame "sim.data.frame"
 # can be used in teamEM, e.g. teamEM(gen.test.data()$simData)
 
-gen.test.data <- function(continuous = FALSE){
+gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68), 
+                          sigma = c(4, 5.5, 8.15), age = c(2,3,4), 
+                          continuous = FALSE){
   # Aim to produce three similar data sets similar to FishID, Length and Age, on
   # the basis of the pdf of the combination of three distributions.
+  # Defaults are set to be similar to FishLengths.R
   # Inputs:
-  #       no inputs required.
+  #       n - Number of random lengths.
+  #       known - vector of number of known observations for each age class
+  #       mu - means for simulated data
+  #       sigma - sigma values for simluated data
+  #       age - the age catagory for observations
+  #       continuous - flag to indicate if ages should be continuious or not, 
   # Outputs:
   #       A list including a data frame of the mus, sigmas and lambdas of the 
   #       three simulated distributions. These have been included so that they  
@@ -19,49 +27,54 @@ gen.test.data <- function(continuous = FALSE){
   #       Lengths that has been used to create the third item, the data frame, 
   #       "sim.data.frame", that can be put through the teamEM function for testing.
   
-  #creating parameters for simulation: 
-  mu <- runif(3, 5, 100)
-  sigma <- runif(3, 2, 10)
-  lambda <- rep(0, 3)
-  lambda[1] <- runif(1, .1, .4)
-  lambda[2] <- runif(1, .1, .4)
-  lambda[3] <- 1- (lambda[1]+lambda[2])
-  n <- 1000
+  #Calculate lambda
+  lambda <- known/sum(known)
   
-  X1 <- rnorm(round(lambda[1]*n), mu[1], sigma[1]) 
-  X2 <- rnorm(round(lambda[2]*n), mu[2], sigma[2])
-  X3 <- rnorm(round(lambda[3]*n+1), mu[3], sigma[3])
+  #Generate Random Lengths
+  gen_Temp <- NULL
+  for (i in c(1:length(known))){
+    gen_Temp <- c(gen_Temp, rnorm(known[i], mu[i], sigma[i]))
+  }
   
-  sim.fish.lengths <- c(X1, X2, X3)
-  sim.fish.lengths <- sim.fish.lengths[1:n]
+  #Generate Unknown random lengths
+  rng <- sample(c(1:length(known)), n-sum(known), replace = T)
+  unk_lengths <- rnorm(known[rng], mu[rng], sigma[rng])
+  sim.fish.lengths <- c(gen_Temp,unk_lengths)
   
-  #plotting to demonstrate the combination of three different normal distribtion:
-  par(mfrow = c(2,1))
-  hist(sim.fish.lengths, breaks = seq(-50, 150, 5))
-  x.plot <- seq(1, n, 1)
-  plot(x.plot, sim.fish.lengths)
-  par(mfrow = c(2,1))
+  # # Plots to illustrate the values are sufficently randomly generated from
+  # # specified means and sds. They follow format of a plot of known random
+  # # lengths and a plot all random lengths in a histogram and scatterplot
+  # par(mfrow = c(2,1))
+  # hist(gen_Temp)
+  # hist(sim.fish.lengths)
+  # x.plot <- seq(1, n, 1)
+  # plot(seq(1, sum(known), 1), gen_Temp)
+  # for (i in cumsum(known)){abline(v=i+0.5)}
+  # plot(x.plot, sim.fish.lengths)
+  # for (i in cumsum(known)){abline(v=i+0.5)}
+  # par(mfrow = c(1,1))
   
+  #k_table format of u, sigma and lambda
   k_table <- data.frame(mu = mu, sigma = sigma, lambda = lambda)
+  rownames(k_table) <- age
+
+  #Add NAs for ages that are unknown
+  vec_Ages <- NULL
+  for (i in c(1:length(age))){
+    vec_Ages <- c(vec_Ages, rep(age[i], known[i]))
+  }
+  vec_Ages <- c(c(vec_Ages, rep(NA, n-sum(known)))) 
   
-   #creating data frame using simulated fish lengths:
-  #choose lambda*100 places from the distribution:
-  sim.data.frame <- data.frame("FishID" = rep(0, 1000), 
-                               "Length" = sim.fish.lengths, "Age" = rep(NA, 1000))
-  index.known <- rep(0, 100)
-  index.known1 <- sample(1:round(lambda[1]*n), round(lambda[1]*100))
-  index.known2 <- sample(1:round(lambda[2]*n), round(lambda[2]*100))
-  index.known3 <- sample(1:round(lambda[3]*n), round(lambda[3]*100))
+  # Build dataframe for ouput
+  sim.data.frame <- data.frame("Length" = sim.fish.lengths, "Age" = vec_Ages)
   
-  #assigning Age categories:
-  sim.data.frame$Age[index.known1] <- 1
-  sim.data.frame$Age[round(lambda[1]*n)+index.known2] <- 2
-  sim.data.frame$Age[round(lambda[1]*n) + round(lambda[2]*n) + index.known3] <- 3
+  # Jitter ages if testing for non-continuious ages
+  if (continuous){sim.data.frame$Age <- jitter(sim.data.frame$Age, factor = .5)}
   
-  return(list(k_table = k_table, simLengths = sim.fish.lengths, simData = sim.data.frame))
+  return(list(k_table = k_table, simData = sim.data.frame))
 }
 
-#gen.test.data()
+gen.test.data()
 
 
 #---------------Function for testing the Algorith Implementation----------------
