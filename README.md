@@ -104,9 +104,11 @@ In this test trial it becomes more evident with the inclusion of the probability
 ## Task 5: Results reporting
 | Parameter | mu | sigma | lambda |
 |-----------|----|-------|--------|
-| Age 1     | 23.39995  | 3.897076     | 0.2054526      |
-| Age 2     | 41.95479  | 5.488541     | 0.4531959      |
-| Age 3     | 67.06457  | 8.153021     | 0.3413516      |
+| Age 1     | 23.11271  | 3.852847     | 0.2019192      |
+| Age 2     | 41.80995  | 5.629878     | 0.4526787      |
+| Age 3     | 66.86062  | 8.356780     | 0.3454021      |
+ 
+The above table of parameters was generated using the default results for our teamEM() function. Different results will arise depending on the values of inc_known_as_unknown_iter and inc_known_iter in the maximization algorithim. 
  
 ![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Functions%20Histo.png)
 Plot of the original data with the densities of the mixture components superimposed.
