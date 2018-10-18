@@ -4,48 +4,44 @@ source("functions.R", local = TRUE)
 
 #-------------------------Generating Testing DataFrames-------------------------
 
+# This is the new function, mmore direct approach, I've included plots for my own
+# understanding, I'll probably be commented out.
+
 gen.test.data <- function(continuous = FALSE){
-  # Aim is to generate a random data frame of numeric values.
+  # Aim to produce three similar data sets similar to FishID, Length and Age, on
+  # the basis of the pdf of the combination of three distributions.
   # Inputs:
-  #       "continuous": Giving a choice between continuous age values and 
-  #       category style.
+  #       no inputs required.
   # Outputs:
-  #       "A": a data frame of random dimensions, randomly selected key columns
-  #       and randomly generated values in those column. All values should be 
-  #       numeric.
+  #       A list including a data frame of the mus, sigmas and lambdas of the three
+  #       simulated distributions. These have been included so that they can be used 
+  #       in imp.test.em to verify the final estimates that are given by the EM algo.
+  #       The second item on the list is a vector of Fish Lengths to be used to 
+  #        create a data frame that can be put through the teamEM function for testing.
+ 
+  mu <- runif(3, 1, 100)
+  sigma <- runif(3, 1, 10)
+  lambda <- rep(0, 3)
+  lambda[1] <- runif(1, .1, .5)
+  lambda[2] <- runif(1, .1, .5)
+  lambda[3] <- 1- (lambda[1]+lambda[2])
+  n <- 1000
   
-  #generate number of dimensions:
-  n <- sample(3:100, 2, replace = T) ### should be :100
-  #assign labels of FishID Length and Age to random columns:
-  p <- sample(1:n[2], 3, replace = F) #replace false to avoid duplicate labels
+  X1 <- lambda[1]*rnorm(ceiling(n/3), mu[1], sigma[1])
+  X2 <- lambda[2]*rnorm(ceiling(n/3)-1, mu[2], sigma[2])
+  X3 <- lambda[3]*rnorm(ceiling(n/3)-1, mu[3], sigma[3])
   
-  #create empty data frame using generations above:
-  size <- n[1]*n[2]
-  A <- data.frame(matrix(rep(0, size),nrow = n[1], ncol = n[2]))
-  colnames(A)[p[1]] <- ("FishID")
-  colnames(A)[p[2]] <- ("Length")
-  colnames(A)[p[3]] <- ("Age")
+  sim.fish.lengths <- c(X1, X2, X3)
   
-  #data to fill important columns:
-  if (continuous == FALSE){x <- sample(1:15, n[1], replace = T)}
-  else{x <- runif(n[1], 1, 15)}
-  y <- runif(n[1], 1, 100)
-  z <- sample(1:1000, n[1], replace = T)
+  par(mfrow = c(2,1))
+  hist(sim.fish.lengths, w = 5)
+  x.plot <- seq(1., 100.9, .1)
+  plot(x.plot, sim.fish.lengths)
+  par(mfrow = c(2,1))
   
-  #placing in data frame A:
-  A[p[1]] <- z
-  A[p[2]] <- y
-  A[p[3]] <- x
+  k_table <- data.frame(mu = mu, sigma = sigma, lambda = lambda)
   
-  #putting in NAs into Age:
-  num.of.na <- sample(ceiling(n[1]/10):floor(n[1]*9/10), 1)
-  print(n[1])
-  print(num.of.na)
-  naselection <- sample(1:n[1], num.of.na, replace  = F)
-  print(naselection)
-  A[naselection, p[3]] <- NA
-  print(A[naselection[1], p[3]])
-  return(A)
+  return(list(k_table = k_table, sim.fish.lengths))
 }
 
 #gen.test.data()
