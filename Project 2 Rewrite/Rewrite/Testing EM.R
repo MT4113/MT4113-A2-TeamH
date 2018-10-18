@@ -1,6 +1,4 @@
-source("ErrorChecks.R", local = TRUE)
-source("teamEM.R", local = TRUE)
-source("functions.R", local = TRUE)
+
 
 #-------------------------Generating Testing DataFrames-------------------------
 
@@ -19,6 +17,8 @@ gen.test.data <- function(continuous = FALSE){
   #       The second item on the list is a vector of Fish Lengths to be used to 
   #        create a data frame that can be put through the teamEM function for testing.
  
+  source("teamEM.R", local = TRUE)
+
   mu <- runif(3, 5, 100)
   sigma <- runif(3, 2, 10)
   lambda <- rep(0, 3)
@@ -66,6 +66,8 @@ imp.test.em <- function(A){
   #                                       each curve as a percentage of closed 
   #                                       integral of the initial estiamted pdf.
   
+  source("teamEM.R", local = TRUE)
+
   result <- teamEM(A)
   
   uniq_ages <- unique(A$Age)         
@@ -100,6 +102,7 @@ imp.test.em <- function(A){
   par(mfrow = c(1,1))
   xdata <- x$Length
   
+  base <- seq(0, 100, by = .1) 
   plot(base, y = rowSums(y), col = "red", type =  "l", ylim = c(0,.04), xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
   lines(base, y = rowSums(z), col = "blue" )
   legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
@@ -108,8 +111,8 @@ imp.test.em <- function(A){
   par(mfrow = c(1,1))
   
   #check known data to compare to initials and final estimates
-  difference = abs(sum((y1+y2+y3) - (z1+z2+z3)))
-  relative.diff <- difference/sum(z1+z2+z3)*100
+  difference = abs(sum(rowSums(y) - rowSums(z)))
+  relative.diff <- difference/sum(z)*100
   
   behaviour <- 0
   if (relative.diff > 10){behaviour = "Large variation between initial estimated distribtion and final estimated distribution."}
