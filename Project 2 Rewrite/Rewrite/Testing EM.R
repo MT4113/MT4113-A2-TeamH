@@ -2,8 +2,9 @@
 
 #-------------------------Generating Testing DataFrames-------------------------
 
-# This is the new function, mmore direct approach, I've included plots for my own
-# understanding, I'll probably be commented out.
+# This is the generating function, I've included plots visualisation of the 
+# distribution. For testing use third output, the data frame "sim.data.frame"
+# can be used in teamEM, e.g. teamEM(gen.test.data()$simData)
 
 gen.test.data <- function(continuous = FALSE){
   # Aim to produce three similar data sets similar to FishID, Length and Age, on
@@ -11,14 +12,14 @@ gen.test.data <- function(continuous = FALSE){
   # Inputs:
   #       no inputs required.
   # Outputs:
-  #       A list including a data frame of the mus, sigmas and lambdas of the three
-  #       simulated distributions. These have been included so that they can be used 
-  #       in imp.test.em to verify the final estimates that are given by the EM algo.
-  #       The second item on the list is a vector of Fish Lengths to be used to 
-  #        create a data frame that can be put through the teamEM function for testing.
- 
-  source("teamEM.R", local = TRUE)
-
+  #       A list including a data frame of the mus, sigmas and lambdas of the 
+  #       three simulated distributions. These have been included so that they  
+  #       can be used in imp.test.em to verify the final estimates that are 
+  #       given by the EM algo. The second item on the list is a vector of Fish  
+  #       Lengths that has been used to create the third item, the data frame, 
+  #       "sim.data.frame", that can be put through the teamEM function for testing.
+  
+  #creating parameters for simulation: 
   mu <- runif(3, 5, 100)
   sigma <- runif(3, 2, 10)
   lambda <- rep(0, 3)
@@ -27,21 +28,37 @@ gen.test.data <- function(continuous = FALSE){
   lambda[3] <- 1- (lambda[1]+lambda[2])
   n <- 1000
   
-  X1 <- rnorm(ceiling(n/3), mu[1], sigma[1])
-  X2 <- rnorm(ceiling(n/3)-1, mu[2], sigma[2])
-  X3 <- rnorm(ceiling(n/3)-1, mu[3], sigma[3])
+  X1 <- rnorm(round(lambda[1]*n), mu[1], sigma[1]) 
+  X2 <- rnorm(round(lambda[2]*n), mu[2], sigma[2])
+  X3 <- rnorm(round(lambda[3]*n+1), mu[3], sigma[3])
   
   sim.fish.lengths <- c(X1, X2, X3)
+  sim.fish.lengths <- sim.fish.lengths[1:n]
   
+  #plotting to demonstrate the combination of three different normal distribtion:
   par(mfrow = c(2,1))
-  hist(sim.fish.lengths, w = 5)
-  x.plot <- seq(1., 100.9, .1)
+  hist(sim.fish.lengths, breaks = seq(-50, 150, 5))
+  x.plot <- seq(1, n, 1)
   plot(x.plot, sim.fish.lengths)
   par(mfrow = c(2,1))
   
   k_table <- data.frame(mu = mu, sigma = sigma, lambda = lambda)
   
-  return(list(k_table = k_table, sim.fish.lengths))
+   #creating data frame using simulated fish lengths:
+  #choose lambda*100 places from the distribution:
+  sim.data.frame <- data.frame("FishID" = rep(0, 1000), 
+                               "Length" = sim.fish.lengths, "Age" = rep(NA, 1000))
+  index.known <- rep(0, 100)
+  index.known1 <- sample(1:round(lambda[1]*n), round(lambda[1]*100))
+  index.known2 <- sample(1:round(lambda[2]*n), round(lambda[2]*100))
+  index.known3 <- sample(1:round(lambda[3]*n), round(lambda[3]*100))
+  
+  #assigning Age categories:
+  sim.data.frame$Age[index.known1] <- 1
+  sim.data.frame$Age[round(lambda[1]*n)+index.known2] <- 2
+  sim.data.frame$Age[round(lambda[1]*n) + round(lambda[2]*n) + index.known3] <- 3
+  
+  return(list(k_table = k_table, simLengths = sim.fish.lengths, simData = sim.data.frame))
 }
 
 #gen.test.data()
