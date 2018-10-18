@@ -84,8 +84,7 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
 # of the real data "behaviour" segment will be in comparison to that.
 # If there isn't any real data, as in the case of the original dataset, will only
 # compare to initial.
-
-imp.test.em <- function(A){
+imp.test.em <- function(A, test = FALSE){
   # Aiming to show for each input data frame, "A", that the outputs given by the 
   # teamEM function are as would be expected for the data frame.
   # Input:
@@ -101,64 +100,130 @@ imp.test.em <- function(A){
   #                     "differencePercentage": diff in the closed integral of 
   #                                       each curve as a percentage of closed 
   #                                       integral of the initial estiamted pdf.
-  
-  source("teamEM.R", local = TRUE)
+  if (test == TRUE){
+    test.list <- A
+    result <- teamEM(test.list$simData)
+    data <- test.list$simData
+    k_table <- test.list$k_table
+    
+    #output class checks: perfect score is 5
+    class.check <- data.frame(check = rep(0,5), 
+                              row.names =  c("estimates", "inits", "posterior", 
+                                             "likelihood", "converged"))
+    if (is.numeric(data.matrix(result$estimates)) == TRUE){class.check[1,1] <- 1}
+    if (is.numeric(data.matrix(result$inits)) == TRUE){class.check[2,1] <- 1}
+    if (is.numeric(data.matrix(result$posterior)) == TRUE){class.check[3,1] <- 1}
+    if (is.numeric(result$likelihood) == TRUE){class.check[4,1] <- 1}
+    if (is.logical(result$converged) == TRUE){class.check[5,1] <- 1}
+    
+    class.check.sum = sum(class.check)
+    class.result <- 0
+    if (class.check.sum == 5){class.result = "All outputs in form expected."}
+    else{class.result = "One or more outputs in a form unexpected."}
+    data <- na.omit(data)
+    uniq_ages <- unique(data$Age)
+    uniq_ages <-uniq_ages[order(uniq_ages)]
+    uniq_ages <- uniq_ages[uniq_ages != -1]
+    k_numb <- length(uniq_ages)
+    
+    y <- mapply(function(mu,sigma,lambda, base){
+      return(lambda*dnorm(base,mu,sigma))}, result$estimates$mu, 
+      result$estimates$sigma, result$estimates$lambda, 
+      MoreArgs=list(base = seq(0, 100, by = .1)))
+    z <- mapply(function(mu,sigma,lambda, base){
+      return(lambda*dnorm(base,mu,sigma))}, result$inits$mu, 
+      result$inits$sigma, result$inits$lambda, 
+      MoreArgs=list(base = seq(0, 100, by = .1)))
+    
+    w <- mapply(function(mu,sigma,lambda, base){
+      return(lambda*dnorm(base,mu,sigma))}, k_table$mu, 
+      k_table$sigma, k_table$lambda, 
+      MoreArgs=list(base = seq(0, 100, by = .1)))
+    # Plotting: style depends whether you've indicated it's a test or not.
+    par(mfrow = c(1,1))
+    
+    plot(seq(0, 100, by = .1), y = rowSums(y), col = "red", type =  "l", 
+         xlab = " Length ", ylab = " Probability Density ", 
+         main = " Comparison Between Estimates")
+    lines(seq(0, 100, by = .1), y = rowSums(z), col = "blue" )
+    lines(seq(0, 100, by = .1), y = rowSums(w), col = "green")
+    legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates", "Real Estimates"), 
+           col = c("red", "blue", "green"), lty = 1:1, cex = .75)
+    par(mfrow = c(1,1))
+    
+    # Behavior: percentage difference given from difference in integrals over 
+    # discrete integral of prior curve.
+    behaviour <- data.frame(percentage_difference = rep(0,3), 
+                            row.names =  c("real to initial (%)", 
+                                           "real to final (%)", 
+                                           "initial to final (%)"))
+    
+    difference1 = abs(sum((rowSums(z)) - rowSums(w)))
+    difference2 = abs(sum((rowSums(y)) - rowSums(w)))
+    difference3 = abs(sum((rowSums(y)) - rowSums(z)))
+    
+    behaviour$percentage_difference[1] <- difference1/sum(rowSums(w))*100
+    behaviour$percentage_difference[2] <- difference2/sum(rowSums(w))*100
+    behaviour$percentage_difference[3] <- difference3/sum(rowSums(z))*100
+    
+  }else{ 
+    result <- teamEM(A) 
+    #output class checks: perfect score is 5
+    class.check <- data.frame(check = rep(0,5), 
+                              row.names =  c("estimates", "inits", "posterior", 
+                                             "likelihood", "converged"))
+    if (is.numeric(data.matrix(result$estimates)) == TRUE){class.check[1,1] <- 1}
+    if (is.numeric(data.matrix(result$inits)) == TRUE){class.check[2,1] <- 1}
+    if (is.numeric(data.matrix(result$posterior)) == TRUE){class.check[3,1] <- 1}
+    if (is.numeric(result$likelihood) == TRUE){class.check[4,1] <- 1}
+    if (is.logical(result$converged) == TRUE){class.check[5,1] <- 1}
+    
+    class.check.sum = sum(class.check)
+    class.result <- 0
+    if (class.check.sum == 5){class.result = "All outputs in form expected."}
+    else{class.result = "One or more outputs in a form unexpected."}
+    
+    uniq_ages <- unique(A$Age)         
+    uniq_ages <-uniq_ages[order(uniq_ages)]
+    uniq_ages <- uniq_ages[uniq_ages != -1]
+    k_numb <- length(uniq_ages)
+    
+    y <- mapply(function(mu,sigma,lambda, base){
+      return(lambda*dnorm(base,mu,sigma))}, result$estimates$mu, 
+      result$estimates$sigma, result$estimates$lambda, 
+      MoreArgs=list(base = seq(0, 100, by = .1)))
+    z <- mapply(function(mu,sigma,lambda, base){
+      return(lambda*dnorm(base,mu,sigma))}, result$inits$mu, 
+      result$inits$sigma, result$inits$lambda, 
+      MoreArgs=list(base = seq(0, 100, by = .1)))
+    
+    par(mfrow = c(1,1))
+    plot(seq(0, 100, by = .1), y = rowSums(y), col = "red", type =  "l", 
+         ylim = c(0,.04), xlab = " Length ", ylab = " Probability Density ", 
+         main = " Comparison from Initial to Final Estimates")
+    lines(seq(0, 100, by = .1), y = rowSums(z), col = "blue" )
+    legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
+           col = c("red", "blue"), lty = 1:1, cex = .75)
+    par(mfrow = c(1,1))
+    
+    # Behavior: percentage difference given from difference in integrals over 
+    # discrete integral of prior curve.
+    behaviour <- data.frame(percentage_difference = rep(0,1), 
+                            row.names =  c("initial to final (%)"))
 
-  result <- teamEM(A)
-  
-  uniq_ages <- unique(A$Age)         
-  uniq_ages <-uniq_ages[order(uniq_ages)]
-  uniq_ages <- uniq_ages[uniq_ages != -1]
-  k_numb <- length(uniq_ages)
-  
-  #output class checks: perfect score is 5
-  class.check <- data.frame(check = rep(0,5), row.names =  c("estimates", "inits", "posterior", "likelihood", "converged"))
-  if (is.numeric(data.matrix(result$estimates)) == TRUE){class.check[1,1] <- 1}
-  if (is.numeric(data.matrix(result$inits)) == TRUE){class.check[2,1] <- 1}
-  if (is.numeric(data.matrix(result$posterior)) == TRUE){class.check[3,1] <- 1}
-  if (is.numeric(result$likelihood) == TRUE){class.check[4,1] <- 1}
-  if (is.logical(result$converged) == TRUE){class.check[5,1] <- 1}
-  print(class.check)
-  class.check.sum = sum(class.check)
-  class.result <- 0
-  if (class.check.sum == 5){class.result = "All outputs in form expected."}
-  else{class.result = "One or more outputs in a form unexpected."}
+    difference = abs(sum((rowSums(y)) - rowSums(z)))
 
-  #behavior testing, are A's results as expected?:
-  
-  # shape testing specific
-  result <- teamEM(x)
-  y <- mapply(function(mu,sigma,lambda, base){return(lambda*dnorm(base,mu,sigma))}, result$estimates$mu, 
-              result$estimates$sigma, result$estimates$lambda, 
-              MoreArgs=list(base = seq(0, 100, by = .1)))
-  z <- mapply(function(mu,sigma,lambda, base){return(lambda*dnorm(base,mu,sigma))}, result$inits$mu, 
-              result$inits$sigma, result$inits$lambda, 
-              MoreArgs=list(base = seq(0, 100, by = .1)))
-  
-  par(mfrow = c(1,1))
-  xdata <- x$Length
-  
-  base <- seq(0, 100, by = .1) 
-  plot(base, y = rowSums(y), col = "red", type =  "l", ylim = c(0,.04), xlab = " Length ", ylab = " Probability Density ", main = " Comparison from Initial to Final Estimates")
-  lines(base, y = rowSums(z), col = "blue" )
-  legend(0, 0.03, legend = c("Final Estimates", "Initial Estimates"), 
-         col = c("red", "blue"), lty = 1:1, cex = .75)
-  
-  par(mfrow = c(1,1))
-  
-  #check known data to compare to initials and final estimates
-  difference = abs(sum(rowSums(y) - rowSums(z)))
-  relative.diff <- difference/sum(z)*100
-  
-  behaviour <- 0
-  if (relative.diff > 10){behaviour = "Large variation between initial estimated distribtion and final estimated distribution."}
-  if(relative.diff <= 10){behaviour = "Small variation between initial estimated distribtion and final estimated distribution."}
+    behaviour$percentage_difference[1] <- difference/sum(rowSums(z))*100
+    }
   
   
-  conclusion <- list(classResult = class.result, classCheck = class.check, behaviourCheck = behaviour, differencePercentage = c(relative.diff, "%"))
+  conclusion <- list(classResult = class.result, classCheck = class.check, 
+                     behaviourCheck = behaviour)
   
   return(conclusion)
 }
+
+#----------------------------Other Testing Functions----------------------------
 
 test_ErrorChecks <- function(x){
   #Funciton to iterate some of the testing for booleans and numeric values
