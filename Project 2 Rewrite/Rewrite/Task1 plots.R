@@ -1,17 +1,17 @@
-
-
 library(dplyr)
+library(ggplot2)
+
 #Renaming 'x' dataset to Fish_Length for convenience 
+load("FishLengths.RData") 
 Fish_Length <- x
 
-library(ggplot2)
 #Scatterplot between Fish Length and Age
 Plot1 <- ggplot(Fish_Length, aes(Age, Length)) +
          geom_point(aes(colour = factor(Age))) +
          xlab(" Age Category " ) + ylab(" Fish Length in Cm ") +
          theme_dark() + ggtitle(" Scatterplot between Fish Length and Age ")+
          stat_summary(fun.y = " mean ",
-                      colour = " white", geom = " line ",group = 1)
+                      colour = "white", geom = "line",group = 1)
   
         
 Plot1
@@ -43,16 +43,26 @@ lines(X, Y, col = "red")
 
 #Density Histogram of Fish Length
 Plot4 <- ggplot(Fish_Length, aes(x = Length, y = ..density.. )) +
-         geom_histogram(binwidth = (5), colour = " black ", fill = " steelblue ") +
+         geom_histogram(binwidth = (5), colour = "black", fill = "steelblue") +
          geom_line(data = Fish_Length, aes(x = X, y = Y), color = "white") +
          ggtitle(" Density histogram of Fish Length ") +
          xlab(" Fish Length in Cm")+ ylab(" Density ")+ theme_dark() 
 
 Plot4        
      
+source("teamEM.R", local = TRUE)
+results <- teamEM(x)
+ests <- results$estimates 
 
-      
-        
-      
+Plot5 <- ggplot(Fish_Length, aes(x = Length)) + 
+         geom_histogram(aes(y = ..density..), binwidth = (5), colour = "black", 
+                       fill = " steelblue ") +
+        stat_function(fun = pdf, args = list(k_tab = ests), color = "red")+ 
+        ggtitle(" Density histogram of Fish Length ") +
+        xlab(" Fish Length in Cm")+ ylab(" Density "); Plot5
 
-                 
+pdf <- function(x, k_tab){
+   rowSums(mapply(function(mu,sigma,lambda,x){return(lambda*dnorm(x,mu,sigma))},
+                  k_tab$mu, k_tab$sigma, k_tab$lambda, MoreArgs = list(x = x)))
+  
+}
