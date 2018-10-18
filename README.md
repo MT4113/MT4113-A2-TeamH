@@ -31,21 +31,73 @@
 
 ![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/EM-Algorithm_1-2.png)
 
-The first part of the EM algorithm is initialization. Firstly, function (1) is created for finding the mean, standard deviation and lambda for each age class based on the observations from the dataset with known ages. Its output is used as the input in function (2) to generate initial probability estimates for elements with unknown age class and updating the mean, standard deviation and lambda based on those results. Then the iterative process is started. Using those updated estimates posterior probabilities for each observation and age class are calculated (function 3). Function (4) generates new estimates for mean, standard deviation and lambda at each iterative step. In order to determine convergence of the maximization algorithm function (5) calculates log-likelihoods based on the estimated values from the function (4) and function (3). This iterative process from function (3) to function (5) continues until convergence or the maximum number of iterations is reached. For this algorithm convergence is reached when the difference between log-likelihoods generated in two consecutive iterative steps is less than epsilon. Following that, the output of the EM algorithm is formatted and returned as the following: a data frame of estimates (function 4 output), a data frame of initial values (function 2 output), convergence of the values (TRUE/FALSE), a data frame of posterior probabilities (function 3) and a vector of log-likelihood values which were generated at each iterative step (function 5).
+The first part of the EM algorithm is initialization. Firstly, function (1) is created for finding the mean, standard deviation and lambda for each age class based on the observations from the dataset with known ages. Its output is used as the input in function (2) to generate initial probability estimates for elements with unknown age class and updating the mean, standard deviation and lambda based on those results. 
+
+Then the iterative process is started. Using those updated estimates posterior probabilities for each observation and age class are calculated (function 3). Function (4) generates new estimates for mean, standard deviation and lambda at each iterative step. In order to determine convergence of the maximization algorithm function (5) calculates log-likelihoods based on the estimated values from the function (4) and function (3). This iterative process from function (3) to function (5) continues until convergence or the maximum number of iterations is reached. 
+
+For this algorithm convergence is reached when the difference between log-likelihoods generated in two consecutive iterative steps is less than epsilon. Following that, the output of the EM algorithm is formatted and returned as the following: a data frame of estimates (function 4 output), a data frame of initial values (function 2 output), convergence of the values (TRUE/FALSE), a data frame of posterior probabilities (function 3) and a vector of log-likelihood values which were generated at each iterative step (function 5).
 
 ## Task 3: Algorithm implementation
 
-- Create modular code consisting of a set of documented and tested functions implementing this algorithm. Include links to these functions in the README file:
+- [Documentation on all functions made can be found here:](https://github.com/eirenjacobson/MT4113-A2-TeamH/wiki/Documentation)
 
-- [Code for implementing the EM algorithm](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Scripts/teamEM.R)
+- [Code for implementing the EM algorithm](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/teamEM.R)
 
-- [Maybe you also have subroutine functions to e.g., calculate the likelihood](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Scripts/calcLikelihood.R)
+- [Code for initialising and functions that contribute to the main teamEM function.](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/functions.R)
+
 
 ## Task 4: Function testing
+- [Link to script for the Testing of the EM algorithm, including the function that generates simulated data sets](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Testing%20EM.R)
 
-- Write a function to create simulated datasets with similar properties to the "true" data.  Include a link to this function in the README file.
+**Demonstrating that implementing the EM algorithm with similar data sets** 
+For comparison, first it will be demonstrated with the original data set "x". The function imp.test.em(x) gives the output:
 
-- Show that the algorithm returns correct values for simulated datasets.  How you do this is up to your team.
+$classResult
+[1] "All outputs in form expected."
+
+|Class Check|check|
+|-----------|-----|
+|estimates  |  1  |
+|inits      |  1  |
+|posterior  |  1  |
+|likelihood |  1  |
+|converged  |  1  |
+
+The $classCheck section shown above checks the class of each of the parts of the output of the teamEM function and returns a 1 if all is correct. If the sum of the column is 5, so all results are in the correct form, and then prints out the statement under $classResult. 
+
+|Behaviour Check     |percentage_difference|
+|--------------------|---------------------|
+|initial to final (%)|     0.0005939173    |
+
+The percentage difference shown above is the measure of how the distribution has changed over the course of the EM Algorithm. It is calculated by the integral between the two curves over the integral of the initial over the discrete interval the fish lengths cover.
+
+![Fig6](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/OriginalRplot.png)
+
+As you can see from the chart above the two probability density functions don't differ to greatly.
+
+Now for testing a simulated data frame made out of similar data sets from the gen.test.data(), this time looking at the output of imp.test.em(gen.test.data(), test = TRUE).
+
+$classResult
+[1] "All outputs in form expected."
+
+|Class Check|check|
+|-----------|-----|
+|estimates  |  1  |
+|inits      |  1  |
+|posterior  |  1  |
+|likelihood |  1  |
+|converged  |  1  |
+
+
+|Behaviour Check     |percentage_difference|
+|--------------------|---------------------|
+|real to initial (%) |          0.024672079|
+|real to final (%)   |          0.008049152|
+|initial to final (%)|          0.032713160|
+
+![Fig7](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/SimulationRplot.png)
+
+In this test trial it becomes more evident with the inclusion of the probability density function described by the original parameters that then determined the Lengths generated. Comparing the shape that comes from the initial estimates to that of the real shape and how close the final estimate approach the real probability density function.
 
 ## Task 5: Results reporting
 
