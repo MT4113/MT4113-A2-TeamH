@@ -39,11 +39,12 @@ For this algorithm convergence is reached when the difference between log-likeli
 
 ## Task 3: Algorithm implementation
 
-- Create modular code consisting of a set of documented and tested functions implementing this algorithm. Include links to these functions in the README file:
+- [Documentation on all functions made can be found here:](https://github.com/eirenjacobson/MT4113-A2-TeamH/wiki/Documentation)
 
 - [Code for implementing the EM algorithm](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/teamEM.R)
 
-- [Maybe you also have subroutine functions to e.g., calculate the likelihood](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Scripts/calcLikelihood.R)
+- [Code for initialising and functions that contribute to the main teamEM function.](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/functions.R)
+
 
 ## Task 4: Function testing
 - [Link to script for the Testing of the EM algorithm, including the function that generates simulated data sets](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Testing%20EM.R)
