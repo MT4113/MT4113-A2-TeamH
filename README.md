@@ -45,6 +45,8 @@ For this algorithm convergence is reached when the difference between log-likeli
 
 - [Code for initialising and functions that contribute to the main teamEM function.](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/functions.R)
 
+- [Code for Error traps used in the teamEM function](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/ErrorChecks.R)
+
 
 ## Task 4: Function testing
 - [Link to script for the Testing of the EM algorithm, including the function that generates simulated data sets](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Testing%20EM.R)
