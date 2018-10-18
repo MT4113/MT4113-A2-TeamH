@@ -74,7 +74,7 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
   return(list(k_table = k_table, simData = sim.data.frame))
 }
 
-gen.test.data()
+#gen.test.data()
 
 
 #---------------Function for testing the Algorith Implementation----------------
@@ -232,17 +232,18 @@ testing_ErrorChecks <- function(){
 }
 #testing_ErrorChecks()
 
-test_functions <- function(){
+test_functions <- function(x){
   # Tests to ensure the inputs and outputs are of the correct form 
   # Outputs: Various tables for visual inspection of data 
   
   source("functions.R", local = TRUE)
   #This is to be replaced by a generated dataframe 
-  load("FishLengths.RData")
   x$Age[is.na(x$Age)] <- -1
-  x$FishID <- NULL
+
   
-  ages <- c(1,2,3)
+  ages <- unique(x$Age)
+  ages <- ages[order(ages)]
+  ages <- ages[ages != -1]
   
   # Prints length(ages)x3 matrix of estimates
   # values in matrix should be slightly different due to different arguments 
@@ -250,10 +251,12 @@ test_functions <- function(){
   
   # Prints inital estimates
   k_tab <- init_data_ests(x,ages)
+  print("init_data_ests")
   print(k_tab) 
   
   # Prints estimates for both inc_known_init cases. Should be different from
   # each other but not too signifigant
+  print("init_prob_ests")
   print(init_prob_ests(k_tab, length(ages), T, x[x$Age == -1, ], 
                        x[x$Age != -1, ], ages))
   print(init_prob_ests(k_tab, length(ages), F, x[x$Age == -1, ], 
@@ -262,6 +265,7 @@ test_functions <- function(){
   # Contains two Columns of data one is Length and len(age) cols of probabilites
   # There are apply errors when only one column is specified.
   # First case is known ages, 2nd case is all ages, 3rd is all unknown ages
+  print("prob_ests")
   print(head(prob_ests(x[x$Age != -1, ], k_tab, length(ages))))
   print(head(prob_ests(x, k_tab, length(ages))))
   prob_tab_test <- prob_ests(x[x$Age == -1, ], k_tab, length(ages))
@@ -270,13 +274,36 @@ test_functions <- function(){
   # Prints length(ages)x3 matrix of estimates
   # values in matrix should be slightly different due to different arguments 
   # for each function
+  print("max_ests")
   print(max_ests(prob_tab_test, k_tab, length(ages), F, x[x$Age != -1, ]))
   print(max_ests(prob_tab_test, k_tab, length(ages), T, x[x$Age != -1, ]))
   
   # Prints a likelihood, should be negatively values 
+  print("likelihood")
   print(likelihood(x[x$Age != -1, ], k_tab, length(ages)))
 }
-#test_functions()
 
+# q <- gen.test.data()
+# test_functions(q$simData)
 
-
+working_test <- function(){
+  q <- gen.test.data(n = 1000, known = c(100,100,100,100), mu = c(10,35,60,80 ), 
+                     sigma = c(4, 5.5, 8.15, 10.4), age = c(2,3,4,7), 
+                     continuous = FALSE)
+  
+  print("Data generated...")
+  
+  mine <- teamEM(q$simData, inc_known_as_unknown_iter = T)
+  print("teamEM results generated...")
+  
+  actual <- normalmixEM(q$simData$Length, mu = q$k_table$mu, sigma = q$k_table$sigma, lambda = q$k_table$lambda,
+              epsilon = 1e-08, maxit = 1000)
+  print("actual results generated...")
+  
+  actual_k <- data.frame(actual$mu,actual$sigma, actual$lambda )
+  print(mine$estimates)
+  print(actual_k)
+  print(mine$likelihood[length(mine$likelihood)])
+  print(actual$loglik)
+}
+# working_test()
