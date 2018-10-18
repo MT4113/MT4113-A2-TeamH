@@ -12,31 +12,20 @@
 - Create two plots of the data: one with age on the x-axis and length on the y-axis, and one with length on the x-axis and frequency on the y-axis.  Add axis labels and any additional information you think is relevant (e.g., average length-at-age). Include your figure in your README file like this: 
 
 ![Fig1](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Scatterplot.png)
-
-* The Scatter plot between Fish Length and Age displays the exponential increase in length from Age 1 to Age 2, with the highest lengths of Age 1 and Age 2 being 31cm and 59.8 cm respectively. The mean length of fish from classes 1-3 are 21.4cm, 42.1cm and 67.7cm respectively.  
-
 ![Fig2](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Boxplot.png)
-
-* The mean fish length was found to be 46.68717 cm.
-
 ![Fig3](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Plain%20Histo.png)
-
-*	From the Summary Stats table we can observe the increase in Sd, suggesting increase in variation for the length of fishes from Age class 1-3.
-
 ![Fig4](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Density%20Histo.png)
-
-*	The Fish length data as predicted does not follow Normal distribution and has an Undefined Tri-Modal Shape.
+* The Scatter plot between Fish Length and Age displays the exponential increase in length from Age 1 to Age 2, with the highest lengths of Age 1 and Age 2 being 31cm and 59.8 cm respectively. The mean length of fish from classes 1-3 are 21.4cm, 42.1cm and 67.7cm respectively.  
+* The mean fish length was found to be 46.68717 cm.
+*	From the Summary Stats table we can observe the increase in Sd, suggesting increase in variation for the length of fishes from Age class 1-3. 
+*	The Fish length data as predicted does not follow Normal distribution and has an Undefined Bi-Modal Shape.
 
 
 ## Task 2: Methods description
 
-- In your own words, describe how you will apply the EM algorithm to this dataset (max 250 words).
+![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/EM-Algorithm_1-2.png)
 
-- Include a diagram of your team's approach to the problem.  This can be digital or hand-drawn and scanned in as a PDF. Again, include your diagram in the README file:
-
-![Diagram](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Figures/Diagram.png)
-
-![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/EM-Algorithm-2.pdf)
+The first part of the EM algorithm is initialization. Firstly, function (1) is created for finding the mean, standard deviation and lambda for each age class based on the observations from the dataset with known ages. Its output is used as the input in function (2) to generate initial probability estimates for elements with unknown age class and updating the mean, standard deviation and lambda based on those results. Then the iterative process is started. Using those updated estimates posterior probabilities for each observation and age class are calculated (function 3). Function (4) generates new estimates for mean, standard deviation and lambda at each iterative step. In order to determine convergence of the maximization algorithm function (5) calculates log-likelihoods based on the estimated values from the function (4) and function (3). This iterative process from function (3) to function (5) continues until convergence or the maximum number of iterations is reached. For this algorithm convergence is reached when the difference between log-likelihoods generated in two consecutive iterative steps is less than epsilon. Following that, the output of the EM algorithm is formatted and returned as the following: a data frame of estimates (function 4 output), a data frame of initial values (function 2 output), convergence of the values (TRUE/FALSE), a data frame of posterior probabilities (function 3) and a vector of log-likelihood values which were generated at each iterative step (function 5).
 
 ## Task 3: Algorithm implementation
 
