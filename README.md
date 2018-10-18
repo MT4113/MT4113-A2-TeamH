@@ -108,9 +108,10 @@ In this test trial it becomes more evident with the inclusion of the probability
 | Age 2     | 41.95479  | 5.488541     | 0.4531959      |
 | Age 3     | 67.06457  | 8.153021     | 0.3413516      |
  
-- Plot the original data with the densities of the mixture components superimposed.  Include your figure in the README file.
+![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Functions%20Histo.png)
+Plot of the original data with the densities of the mixture components superimposed.
 
-![Link to the code for where all the plots shown in the README.md file was generated](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Task1%20plots.R)
+[Link to the code for where all the plots shown in the README.md file was generated](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Task1%20plots.R)
 
 ## Task 6: Work attribution
 
