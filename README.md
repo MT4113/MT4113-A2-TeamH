@@ -150,4 +150,4 @@ Charlotte: Wrote original functions for the Initialisation functions (before fur
 Bryant: General project oversight, optimized code, reviewed code figures and reports, coded the itertative portion of the EM algorithim, documented and commented existing code, tested teamEM.R and functions.R for correct inputs/outputs, and offered coding aid to team members on small misc tasks. 
 
 Yulia: Wrote original functions for the Likelihood functions (before further opitmisation and consistency edits). Created the flow-chart showing the team approach and wrote the description of the EM-algorithm.
-Abhinav: Explored the original data and created the plots for Task1 which was also summarised using the summary table. Created the plot and table for Task 5 based on the output from the teamEM fucntion. 
+Abhinav: Explored the original data and created the plots for Task1 which was also summarised using the summary table(Estimates were accordingly calculated). Created the plot and estimates table for Task 5 based on the output from the teamEM fucntion. Looked over the testing of the teamEM function as well.   
