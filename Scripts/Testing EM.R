@@ -9,9 +9,10 @@
 gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68), 
                           sigma = c(4, 5.5, 8.15), age = c(2,3,4), 
                           continuous = FALSE){
-  # Aim to produce three similar data sets similar to FishID, Length and Age, on
-  # the basis of the pdf of the combination of three distributions.
-  # Defaults are set to be similar to FishLengths.R
+  # The purpose of this functions is to generate random datasets for Length and 
+  # Age that can be used to test the effectiveness of our teamEM function. 
+  # Defaults are set to be of similar values to FishLengths.RData
+  #
   # Inputs:
   #       n - Number of random lengths.
   #       known - vector of number of known observations for each age class
@@ -20,13 +21,15 @@ gen.test.data <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
   #       age - the age catagory for observations
   #       continuous - flag to indicate if ages should be continuious or not, 
   # Outputs:
-  #       A list including a data frame of the mus, sigmas and lambdas of the 
-  #       three simulated distributions. These have been included so that they  
-  #       can be used in imp.test.em to verify the final estimates that are 
-  #       given by the EM algo. The second item on the list is a vector of Fish  
-  #       Lengths that has been used to create the third item, the data frame, 
-  #       "sim.data.frame", that can be put through the teamEM function for 
-  #       testing.
+  #       A list including: 
+  # k_table: a data frame of the mus, sigmas and lambdas used to simulate 
+  #          values. These have been included so that they can be used 
+  #          to verify the final estimates that are given by the EM algorithm. 
+  # 
+  # simData: This is the data frame that can be used as an equivalent to 
+  #          the original data file FishLengths.R. It has two columns of Age 
+  #          and Length randomly generated based on inputs specified. Can then 
+  #          be estimated from the EM algorithm when testing.
   
   #Calculate lambda
   lambda <- known/sum(known)
@@ -107,6 +110,7 @@ imp.test.em <- function(A, test = FALSE){
   # plots, the pdf from the initial parameter estimates and another from the 
   # final parameter estimates.
   
+  source("Scripts/teamEM.R", local = T)
   
   if (test == TRUE){
     test.list <- A
@@ -240,7 +244,13 @@ test_ErrorChecks <- function(x){
   return(c(bool, numbPos, numbInt))
 }
 testing_ErrorChecks <- function(){
-  # Testing to ensure error checks are handled properly
+  # Prints TRUE/FALSE values on values to test if the error checks in 
+  # ErrorChecks.R work property. Tests various dataframes, booleans and 
+  # numeric values
+  # Output: 
+  #   Prints to console various booleans of TRUE or FALSE depending on 
+  #   the test run. Specific output is detailed in the code of the function
+  #
   # Should output:
   # [1] FALSE  TRUE  TRUE
   # [1] FALSE FALSE  TRUE
@@ -303,7 +313,7 @@ testing_ErrorChecks <- function(){
 #testing_ErrorChecks()
 
 test_functions <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68), 
-                           sigma = c(4, 5.5, 8.15), age = c(2,3,4), 
+                           sigma = c(4, 5.5, 8.15), ages = c(2,3,4), 
                            continuous = FALSE){
   # Tests to ensure the inputs and outputs are of the correct form 
   # Inputs: 
@@ -313,10 +323,10 @@ test_functions <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
   
   source("Scripts/functions.R", local = TRUE)
   #This is to be replaced by a generated dataframe 
-  x <- gen.test.data(n ,known ,mu ,sigma, age, continuous)$simData
+  x <- gen.test.data(n ,known ,mu ,sigma, ages, continuous)$simData
   print(head(x))
   x$Age[is.na(x$Age)] <- -1
-  ages <- age
+
   
   # Prints length(ages)x3 matrix of estimates
   # values in matrix should be slightly different due to different arguments 
@@ -352,8 +362,6 @@ test_functions <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68),
 }
 #test_functions()
 
-# q <- gen.test.data()
-# test_functions(q$simData)
 working_test <- function(n = 1000, known = c(20,46,34), mu = c(24,42,68), 
                          sigma = c(4, 5.5, 8.15), age = c(2,3,4), 
                          continuous = FALSE){
