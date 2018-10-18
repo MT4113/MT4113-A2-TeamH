@@ -136,6 +136,7 @@ The above table of parameters was generated using the default results for our te
  
 ![Fig5](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/Functions%20Histo.png)
 Plot of the original data with the densities of the mixture components superimposed.
+The distribution of Fish length is not normal and has a tri-modal spread instead. There does not seem to be presence of any outlier for the data and there is increase in variability in the data as the Fish length increases. 
 
 [Link to the code for where all the plots shown in the README.md file was generated](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Scripts/Task1%20plots.R)
 
