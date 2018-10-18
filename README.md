@@ -28,7 +28,9 @@
 - Include a diagram of your team's approach to the problem.  This can be digital or hand-drawn and scanned in as a PDF. Again, include your diagram in the README file:
 
 ![Diagram](https://github.com/MT4113/2018/blob/master/Assignments/A2/StarterRepo/Figures/Diagram.png)
+
 ![Diagram1](https://github.com/eirenjacobson/MT4113-A2-TeamH/blob/master/Figures/EM-Algorithm-2.pdf)
+
 ## Task 3: Algorithm implementation
 
 - Create modular code consisting of a set of documented and tested functions implementing this algorithm. Include links to these functions in the README file:
